@@ -19,7 +19,7 @@ export async function proxy(request: NextRequest) {
   if (pathname === "/api/login") return NextResponse.next();
 
   if (!role) {
-    if (pathname === "/login") return NextResponse.next();
+    if (pathname === "/" || pathname === "/home" || pathname === "/login") return NextResponse.next();
     if (pathname.startsWith("/api/")) {
       return NextResponse.json({ error: "未登录" }, { status: 401 });
     }
@@ -31,7 +31,7 @@ export async function proxy(request: NextRequest) {
 
   if (pathname === "/login") {
     const url = request.nextUrl.clone();
-    url.pathname = "/";
+    url.pathname = "/workbench";
     url.search = "";
     return NextResponse.redirect(url);
   }
@@ -39,7 +39,7 @@ export async function proxy(request: NextRequest) {
   const opsOnly = ["/users", "/audit", "/talents"];
   if (role !== "ops" && opsOnly.some((path) => pathname === path || pathname.startsWith(`${path}/`))) {
     const url = request.nextUrl.clone();
-    url.pathname = "/";
+    url.pathname = "/workbench";
     url.search = "";
     return NextResponse.redirect(url);
   }
@@ -48,7 +48,7 @@ export async function proxy(request: NextRequest) {
     const blocked = ["/enterprises", "/positions", "/ledgers", "/bills", "/plans"];
     if (blocked.some((path) => pathname === path || pathname.startsWith(`${path}/`))) {
       const url = request.nextUrl.clone();
-      url.pathname = "/";
+      url.pathname = "/workbench";
       url.search = "";
       return NextResponse.redirect(url);
     }
@@ -56,7 +56,7 @@ export async function proxy(request: NextRequest) {
 
   if (role === "enterprise" && (pathname === "/enterprises" || pathname === "/enterprises/new")) {
     const url = request.nextUrl.clone();
-    url.pathname = "/";
+    url.pathname = "/workbench";
     url.search = "";
     return NextResponse.redirect(url);
   }

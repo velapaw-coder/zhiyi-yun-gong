@@ -14,7 +14,7 @@ npm run db:setup
 npm run dev
 ```
 
-浏览器打开 [http://127.0.0.1:4721](http://127.0.0.1:4721)。
+浏览器打开 [http://127.0.0.1:4721](http://127.0.0.1:4721) 先看产品介绍。点击「进入控制台 / 登录」后进入工作台；已登录用户的工作台地址是 [http://127.0.0.1:4721/workbench](http://127.0.0.1:4721/workbench)。
 
 `db:setup` 会在没有 `.env` 时从 `.env.example` 复制一份，然后把 SQLite 库建在 `prisma/dev.db` 并写入演示数据。附件落在 `data/uploads/`（已忽略，不进 git）。
 

@@ -10,7 +10,7 @@ export default function ForbiddenPage() {
         这条记录不属于当前账号。越权尝试已经写入安全日志。
       </p>
       <Button className="mt-4" asChild>
-        <Link href="/">回工作台</Link>
+        <Link href="/workbench">回工作台</Link>
       </Button>
     </div>
   );

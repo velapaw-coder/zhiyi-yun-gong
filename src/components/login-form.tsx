@@ -38,7 +38,8 @@ export function LoginForm() {
       return;
     }
     const next = params.get("next");
-    location.href = next && next.startsWith("/") && !next.startsWith("//") ? next : "/";
+    const safe = next && next.startsWith("/") && !next.startsWith("//") && next !== "/" && next !== "/home";
+    location.href = safe ? next : "/workbench";
   }
 
   return (

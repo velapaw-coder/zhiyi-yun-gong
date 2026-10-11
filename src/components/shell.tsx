@@ -21,7 +21,7 @@ function Mark() {
 function itemsFor(actor: Actor) {
   if (actor.role === "ops") {
     return [
-      { href: "/", label: "工作台" },
+      { href: "/workbench", label: "工作台" },
       { href: "/enterprises", label: "企业" },
       { href: "/positions", label: "岗位" },
       { href: "/tasks", label: "任务" },
@@ -34,8 +34,8 @@ function itemsFor(actor: Actor) {
   }
   if (actor.role === "enterprise") {
     return [
-      { href: "/", label: "门户" },
-      { href: actor.enterpriseId ? `/enterprises/${actor.enterpriseId}` : "/", label: "方案与岗位" },
+      { href: "/workbench", label: "门户" },
+      { href: actor.enterpriseId ? `/enterprises/${actor.enterpriseId}` : "/workbench", label: "方案与岗位" },
       { href: "/positions", label: "岗位" },
       { href: "/tasks", label: "任务" },
       { href: "/ledgers", label: "台账" },
@@ -43,14 +43,14 @@ function itemsFor(actor: Actor) {
     ];
   }
   return [
-    { href: "/", label: "待办" },
+    { href: "/workbench", label: "待办" },
     { href: "/tasks", label: "我的任务" },
     { href: "/me", label: "我的档案" },
   ];
 }
 
 function active(pathname: string, href: string) {
-  if (href === "/") return pathname === "/";
+  if (href === "/workbench") return pathname === "/workbench";
   return pathname === href || pathname.startsWith(`${href}/`);
 }
 

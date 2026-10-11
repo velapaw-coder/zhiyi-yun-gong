@@ -1,0 +1,12 @@
+import { LandingPage } from "@/components/landing-page";
+import { getActor } from "@/server/session";
+
+export const metadata = {
+  title: "产品介绍",
+  description: "智翼云工 / SmartWing Cloudwork。以科技赋翼，让合规生长。",
+};
+
+export default async function IntroPage() {
+  const actor = await getActor();
+  return <LandingPage signedIn={Boolean(actor)} />;
+}
