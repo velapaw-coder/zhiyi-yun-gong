@@ -19,6 +19,7 @@ export async function proxy(request: NextRequest) {
   if (pathname === "/api/login") return NextResponse.next();
 
   if (!role) {
+    if (pathname === "/login") return NextResponse.next();
     if (pathname.startsWith("/api/")) {
       return NextResponse.json({ error: "未登录" }, { status: 401 });
     }
