@@ -10,12 +10,21 @@
     "lint": "eslint",
     "db:setup": "node scripts/ensure-env.mjs && prisma db push && tsx prisma/seed.ts",
     "db:seed": "tsx prisma/seed.ts",
-    "verify": "node scripts/ensure-env.mjs && DATABASE_URL=file:./verify.db prisma db push --skip-generate --accept-data-loss && DATABASE_URL=file:./verify.db tsx scripts/verify.ts"
+    "verify": "node scripts/ensure-env.mjs && DATABASE_URL=file:./verify.db prisma db push --skip-generate --accept-data-loss && DATABASE_URL=file:./verify.db tsx scripts/verify.ts",
+    "cf:build": "opennextjs-cloudflare build",
+    "cf:preview": "opennextjs-cloudflare build && opennextjs-cloudflare preview",
+    "cf:deploy": "opennextjs-cloudflare build && opennextjs-cloudflare deploy",
+    "cf:typegen": "wrangler types --env-interface CloudflareEnv cloudflare-env.d.ts",
+    "cf:schema": "node scripts/ensure-env.mjs && prisma migrate diff --from-empty --to-schema-datamodel prisma/schema.prisma --script --output prisma/d1/migrations/0001_init.sql",
+    "cf:seed-sql": "node scripts/export-d1-seed.mjs",
+    "cf:push-uploads": "node scripts/push-uploads-r2.mjs"
   },
   "prisma": {
     "seed": "tsx prisma/seed.ts"
   },
   "dependencies": {
+    "@opennextjs/cloudflare": "^1.20.10",
+    "@prisma/adapter-d1": "^6.19.3",
     "@prisma/client": "^6.19.3",
     "bcryptjs": "^3.0.3",
     "class-variance-authority": "^0.7.1",
@@ -45,6 +54,7 @@
     "eslint-config-next": "16.4.0",
     "tailwindcss": "^4",
     "tsx": "^4.23.15",
-    "typescript": "^5"
+    "typescript": "^5",
+    "wrangler": "^4.149.0"
   }
 }

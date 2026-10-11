@@ -1,7 +1,6 @@
-import { createReadStream } from "node:fs";
-import { mkdir, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { randomUUID } from "node:crypto";
+import { cloudflareBindings } from "@/server/cloudflare";
 import { prisma } from "@/server/db";
 import { AppError } from "@/server/errors";
 import { canReadEnterprise, canReadTask, deny } from "@/server/access";
@@ -22,6 +21,37 @@ const ALLOWED: Record<string, string> = {
 
 export function uploadRoot() {
   return path.join(process.cwd(), "data", "uploads");
+}
+
+async function putBytes(storageKey: string, bytes: Uint8Array, mime: string) {
+  const env = cloudflareBindings();
+  if (env) {
+    if (!env.UPLOADS) {
+      throw new AppError("生产环境未绑定 R2（UPLOADS），无法保存附件");
+    }
+    await env.UPLOADS.put(storageKey, bytes, { httpMetadata: { contentType: mime } });
+    return;
+  }
+  const { mkdir, writeFile } = await import("node:fs/promises");
+  const dir = uploadRoot();
+  await mkdir(dir, { recursive: true });
+  await writeFile(path.join(dir, storageKey), bytes);
+}
+
+async function readBytes(storageKey: string) {
+  const env = cloudflareBindings();
+  if (env) {
+    if (!env.UPLOADS) throw new AppError("生产环境未绑定 R2（UPLOADS），无法读取附件");
+    const object = await env.UPLOADS.get(storageKey);
+    if (!object) throw new AppError("附件文件不存在", "NOT_FOUND");
+    return new Uint8Array(await object.arrayBuffer());
+  }
+  const { readFile } = await import("node:fs/promises");
+  try {
+    return new Uint8Array(await readFile(path.join(uploadRoot(), storageKey)));
+  } catch {
+    throw new AppError("附件文件不存在", "NOT_FOUND");
+  }
 }
 
 export function minimalPdf(text: string) {
@@ -63,19 +93,17 @@ export async function saveUpload(actor: Actor, file: File) {
   }
   if (file.size <= 0) throw new AppError("不能上传空文件");
   if (file.size > MAX_FILE_BYTES) throw new AppError("单个附件不能超过 50MB");
-  const buffer = Buffer.from(await file.arrayBuffer());
-  if (buffer.length > MAX_FILE_BYTES) throw new AppError("单个附件不能超过 50MB");
+  const buffer = new Uint8Array(await file.arrayBuffer());
+  if (buffer.byteLength > MAX_FILE_BYTES) throw new AppError("单个附件不能超过 50MB");
   // TODO: 病毒扫描放到第二期。本期只限制类型与大小。
   const storageKey = `${randomUUID()}.${ext}`;
-  const dir = uploadRoot();
-  await mkdir(dir, { recursive: true });
-  await writeFile(path.join(dir, storageKey), buffer);
+  await putBytes(storageKey, buffer, mime);
   const originalName = path.basename(file.name).slice(0, 180) || `file.${ext}`;
   return prisma.fileAsset.create({
     data: {
       originalName,
       mime,
-      size: buffer.length,
+      size: buffer.byteLength,
       storageKey,
       uploaderId: actor.id,
     },
@@ -128,7 +156,7 @@ export async function readAuthorizedFile(actor: Actor, id: string) {
   if (!allowed) await deny(actor, `下载附件 ${id}`);
   return {
     file,
-    stream: createReadStream(path.join(uploadRoot(), file.storageKey)),
+    bytes: await readBytes(file.storageKey),
     inline: file.mime.startsWith("image/"),
   };
 }

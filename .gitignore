@@ -39,6 +39,11 @@ yarn-error.log*
 /prisma/*.db
 /prisma/*.db-journal
 
+# cloudflare / opennext
+.open-next/
+.wrangler/
+.dev.vars
+
 # vercel
 .vercel
 

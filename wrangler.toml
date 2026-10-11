@@ -1,0 +1,33 @@
+# Cloudflare Workers（OpenNext）。部署前把 database_id 换成
+# `npx wrangler d1 create zhiyi-yun-gong` 打印的 UUID。
+# 多账号时再补 account_id。本文件里的全零 UUID 不能用于远程部署。
+name = "zhiyi-yun-gong"
+main = ".open-next/worker.js"
+compatibility_date = "2026-10-11"
+compatibility_flags = ["nodejs_compat", "global_fetch_strictly_public"]
+
+[assets]
+directory = ".open-next/assets"
+binding = "ASSETS"
+
+[observability]
+enabled = true
+
+# OpenNext 在 Workers 内回调自身时使用。service 必须与 name 一致。
+[[services]]
+binding = "WORKER_SELF_REFERENCE"
+service = "zhiyi-yun-gong"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "zhiyi-yun-gong"
+database_id = "00000000-0000-0000-0000-000000000000"
+migrations_dir = "prisma/d1/migrations"
+
+[[r2_buckets]]
+binding = "UPLOADS"
+bucket_name = "zhiyi-yun-gong-uploads"
+
+# Prisma 在加载 schema 时会读取该变量。Workers 上实际查询走 D1 适配器，不会打开这个文件。
+[vars]
+DATABASE_URL = "file:./dev.db"

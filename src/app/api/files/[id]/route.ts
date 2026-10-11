@@ -1,4 +1,3 @@
-import { Readable } from "node:stream";
 import { NextResponse } from "next/server";
 import { getActor } from "@/server/session";
 import { contentDisposition, readAuthorizedFile } from "@/server/files";
@@ -10,11 +9,10 @@ export async function GET(_request: Request, context: { params: Promise<{ id: st
   const { id } = await context.params;
   try {
     const result = await readAuthorizedFile(actor, id);
-    const web = Readable.toWeb(result.stream) as ReadableStream;
-    return new NextResponse(web, {
+    return new NextResponse(result.bytes, {
       headers: {
         "Content-Type": result.file.mime,
-        "Content-Length": String(result.file.size),
+        "Content-Length": String(result.bytes.byteLength),
         "Content-Disposition": contentDisposition(result.file.originalName, result.inline),
         "Cache-Control": "private, no-store",
       },

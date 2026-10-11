@@ -271,7 +271,7 @@ model BillLineItem {
   remark       String?
 }
 
-/// 统一附件。物理文件在 data/uploads，记录软删除。已验收任务禁止删除交付附件。
+/// 统一附件。本地文件在 data/uploads；Workers 上对象在 R2 绑定 UPLOADS。记录软删除。已验收任务禁止删除交付附件。
 model FileAsset {
   id           String    @id @default(cuid())
   originalName String

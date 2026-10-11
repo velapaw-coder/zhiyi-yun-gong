@@ -1,6 +1,7 @@
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { SignJWT, jwtVerify } from "jose";
+import { cloudflareBindings } from "@/server/cloudflare";
 import { prisma } from "@/server/db";
 import type { Actor, Role } from "@/server/types";
 
@@ -8,9 +9,9 @@ export const SESSION_COOKIE = "zhiyi_session";
 const MAX_AGE = 60 * 60 * 12;
 
 function secret() {
-  const value = process.env.SESSION_SECRET;
+  const value = process.env.SESSION_SECRET || cloudflareBindings()?.SESSION_SECRET;
   if (!value || value.length < 16) {
-    throw new Error("SESSION_SECRET 缺失或过短。请复制 .env.example 为 .env。");
+    throw new Error("SESSION_SECRET 缺失或过短。本地请复制 .env.example；Cloudflare 请执行 wrangler secret put SESSION_SECRET。");
   }
   return new TextEncoder().encode(value);
 }

@@ -8,6 +8,12 @@ const NAV = [
   { href: "#consult", label: "咨询合作" },
 ];
 
+const EDITIONS: Array<[string, string, string, string[]]> = [
+  ["套餐 A · 合规版", "现金流基石", "500 元/人/月", ["低门槛进场", "合规减负可测量", "五流底座先立住"]],
+  ["套餐 B · 增长版", "核心旗舰", "SLA 工单包", ["专属 AI 增长作战", "按月交付可验收", "本期先做一种可计量岗位"]],
+  ["套餐 C · ESG 版", "标杆战略", "第二期", ["S 维度数据可披露", "联合挂牌", "本期控制台不做素材库"]],
+];
+
 export function LandingPage({ signedIn }: { signedIn: boolean }) {
   const consoleHref = signedIn ? "/workbench" : "/login";
 
@@ -160,17 +166,13 @@ export function LandingPage({ signedIn }: { signedIn: boolean }) {
             <p className="text-xs tracking-[0.16em] text-[#0B7C95]">A / B / C</p>
             <h2 className="mt-2 text-3xl font-semibold text-[#063345]">同一份年框里的三级套餐</h2>
             <div className="mt-8 grid gap-4 md:grid-cols-3">
-              {[
-                ["套餐 A · 合规版", "现金流基石", "500 元/人/月", ["低门槛进场", "合规减负可测量", "五流底座先立住"]],
-                ["套餐 B · 增长版", "核心旗舰", "SLA 工单包", ["专属 AI 增长作战", "按月交付可验收", "本期先做一种可计量岗位"]],
-                ["套餐 C · ESG 版", "标杆战略", "第二期", ["S 维度数据可披露", "联合挂牌", "本期控制台不做素材库"]],
-              ].map(([name, role, price, points]) => (
+              {EDITIONS.map(([name, role, price, points]) => (
                 <article key={name} className="rounded-2xl border border-[#D5DEE4] bg-white p-6">
                   <h3 className="text-xl font-semibold text-[#063345]">{name}</h3>
                   <p className="mt-1 text-sm text-[#0B7C95]">{role}</p>
                   <p className="mt-4 text-lg font-semibold text-[#0A4D68]">{price}</p>
                   <ul className="mt-4 space-y-2 text-sm leading-6 text-[#4A5B66]">
-                    {(points as string[]).map((point) => (
+                    {points.map((point) => (
                       <li key={point}>{point}</li>
                     ))}
                   </ul>
