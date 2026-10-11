@@ -1,0 +1,331 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+/// 登录账号。企业角色必须绑定 enterpriseId；执行端绑定 talentId。
+model User {
+  id           String    @id @default(cuid())
+  loginName    String    @unique
+  passwordHash String
+  displayName  String
+  role         String
+  enterpriseId String?
+  enterprise   Enterprise? @relation(fields: [enterpriseId], references: [id])
+  talentId     String?   @unique
+  talent       Talent?   @relation("TalentAccount", fields: [talentId], references: [id])
+  status       String    @default("active")
+  lastLoginAt  DateTime?
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  createdTasks     Task[]              @relation("TaskCreator")
+  submitted        DeliveryVersion[]   @relation("DeliverySubmitter")
+  qaReviews        DeliveryVersion[]   @relation("DeliveryQa")
+  taskLogs         TaskAuditLog[]
+  auditLogs        AuditLog[]
+  loginLogs        LoginLog[]
+  securityLogs     SecurityLog[]
+  uploadedFiles    FileAsset[]
+  checkedLedgers   ComplianceLedger[]  @relation("LedgerChecker")
+  createdBills     Bill[]
+}
+
+model Enterprise {
+  id             String   @id @default(cuid())
+  code           String   @unique
+  name           String
+  industry       String?
+  scaleHeadcount Int
+  contactName    String
+  contactPhone   String
+  contactEmail   String?
+  status         String
+  remark         String?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  users     User[]
+  plans     Plan[]
+  positions Position[]
+  talents   Talent[]             @relation("TalentEnterprise")
+  tasks     Task[]
+  ledgers   ComplianceLedger[]
+  bills     Bill[]
+  files     FileAsset[]
+}
+
+model Plan {
+  id                 String   @id @default(cuid())
+  code               String   @unique
+  enterpriseId       String
+  enterprise         Enterprise @relation(fields: [enterpriseId], references: [id])
+  planVersion        String
+  disabilityFundBase Int
+  disabilityFundGap  Int
+  monthlyServiceFee  Int
+  startDate          DateTime
+  endDate            DateTime
+  signStatus         String
+  /// Q1/产品线：本期固定 compliance_single_position，不做自动测算引擎（Q8）。
+  productLine        String   @default("compliance_single_position")
+  remark             String?
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+
+  positions Position[]
+  files     FileAsset[]
+}
+
+model Position {
+  id               String   @id @default(cuid())
+  code             String   @unique
+  enterpriseId     String
+  enterprise       Enterprise @relation(fields: [enterpriseId], references: [id])
+  planId           String
+  plan             Plan     @relation(fields: [planId], references: [id])
+  name             String
+  /// Q1 默认：仅 AI_CONTENT_OPS（内容编排，按篇/条计量）。
+  type             String   @default("AI_CONTENT_OPS")
+  headcount        Int
+  deliveryStandard String
+  qaRules          String
+  unitPrice        Int
+  settlementCycle  String
+  status           String
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  talents   Talent[]       @relation("TalentPosition")
+  tasks     Task[]
+  lineItems BillLineItem[]
+}
+
+model Talent {
+  id                    String   @id @default(cuid())
+  code                  String   @unique
+  name                  String
+  /// TODO(Q privacy): 生产环境应加密存储。本期演示库明文，非运营界面只显示后 4 位。
+  disabilityCertNo      String
+  disabilityType        String
+  disabilityLevel       String?
+  phone                 String
+  skillTags             String   @default("[]")
+  trainingProgress      String
+  trainingPercent       Int      @default(0)
+  eligiblePositionTypes String   @default("[\"AI_CONTENT_OPS\"]")
+  currentEnterpriseId   String?
+  currentEnterprise     Enterprise? @relation("TalentEnterprise", fields: [currentEnterpriseId], references: [id])
+  currentPositionId     String?
+  currentPosition       Position?   @relation("TalentPosition", fields: [currentPositionId], references: [id])
+  status                String
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+
+  account User?                @relation("TalentAccount")
+  tasks   Task[]
+  ledgers ComplianceLedger[]
+}
+
+model Task {
+  id               String    @id @default(cuid())
+  code             String    @unique
+  enterpriseId     String
+  enterprise       Enterprise @relation(fields: [enterpriseId], references: [id])
+  positionId       String
+  position         Position  @relation(fields: [positionId], references: [id])
+  assigneeTalentId String
+  assignee         Talent    @relation(fields: [assigneeTalentId], references: [id])
+  title            String
+  description      String
+  planStartAt      DateTime
+  planEndAt        DateTime
+  actualStartAt    DateTime?
+  actualEndAt      DateTime?
+  status           String
+  currentDeliveryId String?
+  createdById      String
+  createdBy        User      @relation("TaskCreator", fields: [createdById], references: [id])
+  forceAssigned    Boolean   @default(false)
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+
+  deliveries DeliveryVersion[]
+  logs       TaskAuditLog[]
+  files      FileAsset[]
+
+  @@index([enterpriseId, status, planEndAt])
+  @@index([assigneeTalentId, status])
+}
+
+model DeliveryVersion {
+  id            String   @id @default(cuid())
+  taskId        String
+  task          Task     @relation(fields: [taskId], references: [id])
+  versionNo     Int
+  summary       String
+  links         String   @default("[]")
+  submittedById String
+  submittedBy   User     @relation("DeliverySubmitter", fields: [submittedById], references: [id])
+  submittedAt   DateTime @default(now())
+  proxySubmit   Boolean  @default(false)
+  qaResult      String   @default("pending")
+  qaComment     String?
+  qaChecklist   String?
+  qaById        String?
+  qaBy          User?    @relation("DeliveryQa", fields: [qaById], references: [id])
+  qaAt          DateTime?
+  createdAt     DateTime @default(now())
+
+  files FileAsset[]
+  logs  TaskAuditLog[]
+
+  @@unique([taskId, versionNo])
+}
+
+/// 任务操作日志只追加。业务角色不能删除。
+model TaskAuditLog {
+  id                String   @id @default(cuid())
+  taskId            String
+  task              Task     @relation(fields: [taskId], references: [id])
+  action            String
+  actorUserId       String
+  actor             User     @relation(fields: [actorUserId], references: [id])
+  actorRole         String
+  fromStatus        String?
+  toStatus          String?
+  changedFields     String?
+  comment           String?
+  relatedDeliveryId String?
+  relatedDelivery   DeliveryVersion? @relation(fields: [relatedDeliveryId], references: [id])
+  /// 对企业客户与执行端隐藏。
+  internal          Boolean  @default(false)
+  createdAt         DateTime @default(now())
+
+  @@index([taskId, createdAt])
+}
+
+model ComplianceLedger {
+  id           String    @id @default(cuid())
+  enterpriseId String
+  enterprise   Enterprise @relation(fields: [enterpriseId], references: [id])
+  talentId     String
+  talent       Talent    @relation(fields: [talentId], references: [id])
+  yearMonth    String
+  checkStatus  String
+  anomalyNote  String?
+  checkedById  String?
+  checkedBy    User?     @relation("LedgerChecker", fields: [checkedById], references: [id])
+  checkedAt    DateTime?
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  files FileAsset[]
+
+  @@unique([talentId, yearMonth])
+  @@index([enterpriseId, yearMonth])
+}
+
+model Bill {
+  id                 String   @id @default(cuid())
+  code               String   @unique
+  enterpriseId       String
+  enterprise         Enterprise @relation(fields: [enterpriseId], references: [id])
+  yearMonth          String
+  positionFeeTotal   Int
+  platformServiceFee Int
+  adjustments        String   @default("[]")
+  totalAmount        Int
+  invoiceStatus      String   @default("none")
+  invoiceNo          String?
+  paymentStatus      String   @default("unpaid")
+  paidAmount         Int      @default(0)
+  pricingNote        String?
+  remark             String?
+  status             String   @default("draft")
+  createdById        String
+  createdBy          User     @relation(fields: [createdById], references: [id])
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+
+  lineItems BillLineItem[]
+
+  @@unique([enterpriseId, yearMonth])
+}
+
+model BillLineItem {
+  id           String   @id @default(cuid())
+  billId       String
+  bill         Bill     @relation(fields: [billId], references: [id], onDelete: Cascade)
+  positionId   String?
+  position     Position? @relation(fields: [positionId], references: [id])
+  positionName String
+  quantity     Int
+  unit         String
+  unitPrice    Int
+  amount       Int
+  remark       String?
+}
+
+/// 统一附件。物理文件在 data/uploads，记录软删除。已验收任务禁止删除交付附件。
+model FileAsset {
+  id           String    @id @default(cuid())
+  originalName String
+  mime         String
+  size         Int
+  storageKey   String    @unique
+  uploaderId   String
+  uploader     User      @relation(fields: [uploaderId], references: [id])
+  enterpriseId String?
+  enterprise   Enterprise? @relation(fields: [enterpriseId], references: [id])
+  taskId       String?
+  task         Task?     @relation(fields: [taskId], references: [id])
+  deliveryId   String?
+  delivery     DeliveryVersion? @relation(fields: [deliveryId], references: [id])
+  ledgerId     String?
+  ledger       ComplianceLedger? @relation(fields: [ledgerId], references: [id])
+  ledgerSlot   String?
+  planId       String?
+  plan         Plan?     @relation(fields: [planId], references: [id])
+  deletedAt    DateTime?
+  createdAt    DateTime  @default(now())
+}
+
+model AuditLog {
+  id            String   @id @default(cuid())
+  entityType    String
+  entityId      String
+  action        String
+  actorUserId   String
+  actor         User     @relation(fields: [actorUserId], references: [id])
+  actorRole     String
+  changedFields String?
+  comment       String?
+  createdAt     DateTime @default(now())
+
+  @@index([entityType, entityId, createdAt])
+}
+
+model LoginLog {
+  id        String   @id @default(cuid())
+  userId    String?
+  user      User?    @relation(fields: [userId], references: [id])
+  loginName String
+  success   Boolean
+  detail    String?
+  createdAt DateTime @default(now())
+}
+
+model SecurityLog {
+  id          String   @id @default(cuid())
+  actorUserId String?
+  actor       User?    @relation(fields: [actorUserId], references: [id])
+  action      String
+  path        String?
+  detail      String?
+  createdAt   DateTime @default(now())
+}
