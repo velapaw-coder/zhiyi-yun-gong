@@ -1,7 +1,6 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { forbidden } from "next/navigation";
 import { unstable_rethrow } from "next/navigation";
 import { AppError, isZodIssueError } from "@/server/errors";
 import { requireActor } from "@/server/session";
@@ -21,7 +20,6 @@ async function wrap<T>(work: () => Promise<T>): Promise<ActionResult<T extends v
   } catch (error) {
     unstable_rethrow(error);
     if (error instanceof AppError) {
-      if (error.code === "FORBIDDEN") forbidden();
       return { ok: false, error: error.message };
     }
     if (isZodIssueError(error)) {
