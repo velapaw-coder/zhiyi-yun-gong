@@ -37,20 +37,17 @@ Workers 上不会往本机磁盘写附件。没有 R2 绑定时上传会直接�
 
 D1 目前没有真正的交互式事务。Prisma 的 `$transaction` 在 D1 适配器里会被拆成一条条查询执行，原子性没有保证。本地 SQLite 的事务行为不变。出账、派发这类多表写入在 D1 上有中途失败后留下半成品的可能，这是 MVP 的已知限制。
 
-仓库里还没有在任何 Cloudflare 账号上执行过部署。下面的命令需要你自己的账号登录后运行。
+`wrangler.toml` 已写入账号 `d0e845fde248a912a971bdeb055c6bd4`、D1 `zhiyi-yun-gong`（`b23791bd-f7ac-41c9-8140-9088ed998df6`）和 R2 桶 `zhiyi-yun-gong-uploads`。`SESSION_SECRET` 用 `wrangler secret` 放在账号里，不要写进仓库。
 
-### 1. 登录并创建资源
+Next.js 16.4 会在每个动态请求里读取 `.next/server/preview-props.json`。`@opennextjs/cloudflare@1.20.10` 的 manifest 白名单还没有这个文件，Worker 会在 `getPreviewProps` 抛出 `Unexpected loadManifest`，全站 500。`npm install` 和 `cf:build` 会跑 `scripts/patch-opennext-preview-props.mjs`，把 `preview-props` 加进构建期内联列表。上游 PR [opennextjs-cloudflare#1356](https://github.com/opennextjs/opennextjs-cloudflare/pull/1356) 合并后可以删掉这个补丁。
+
+### 1. 登录
+
+资源已经建好，不必再 `d1 create` / `r2 bucket create`。
 
 ```bash
 npx wrangler login
-npx wrangler whoami
-npx wrangler d1 create zhiyi-yun-gong
-npx wrangler r2 bucket create zhiyi-yun-gong-uploads
 ```
-
-`whoami` 能看到 Account ID。如果登录了多个账号，把 `account_id = "..."` 写进 `wrangler.toml`。
-
-`d1 create` 会打印 `database_id`。用它替换 `wrangler.toml` 里的 `00000000-0000-0000-0000-000000000000`。全零 ID 不能远程部署。
 
 会话密钥不要写进 toml：
 
@@ -112,7 +109,29 @@ npm run cf:preview
 npm run cf:deploy
 ```
 
-`cf:deploy` 会先做 OpenNext 构建，再 `wrangler deploy`。部署成功后的 `*.workers.dev` 地址以命令输出为准。绑定类型有变化时可以再跑 `npm run cf:typegen`。
+`cf:deploy` 会先打 OpenNext 补丁、再构建、再 `wrangler deploy`。当前 Worker 地址是 [https://zhiyi-yun-gong.velapaw.workers.dev](https://zhiyi-yun-gong.velapaw.workers.dev)。部署机需要 `CLOUDFLARE_API_TOKEN`（或已登录的 wrangler），并带上已设置的 `SESSION_SECRET`。
+
+本地先确认动态路由不再 500，再部署：
+
+```bash
+cp .dev.vars.example .dev.vars
+npm run cf:build
+npx wrangler dev --port 4737
+```
+
+另开一个终端：
+
+```bash
+curl -sS -o /dev/null -w "home %{http_code}\n" http://127.0.0.1:4737/
+curl -sS -o /dev/null -w "login %{http_code}\n" http://127.0.0.1:4737/login
+curl -sS -o /dev/null -w "workbench %{http_code}\n" http://127.0.0.1:4737/workbench
+```
+
+未登录时首页和登录页应是 200，工作台应是 302 到 `/login`。确认响应里没有 `Unexpected loadManifest` 之后：
+
+```bash
+npm run cf:deploy
+```
 
 Next.js 16 的 `src/proxy.ts` 在 OpenNext 里按 Node middleware 打包。构建可以通过，但 OpenNext 标明这块支持仍是实验性的。登录跳转若在 Workers 上异常，先看 Worker 日志里的 proxy。
 
