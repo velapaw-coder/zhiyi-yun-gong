@@ -1,5 +1,5 @@
 import { PrismaD1 } from "@prisma/adapter-d1";
-import { PrismaClient } from "@prisma/client";
+import { Prisma, PrismaClient } from "@prisma/client";
 import type { D1Database } from "@cloudflare/workers-types";
 import { cloudflareBindings } from "@/server/cloudflare";
 
@@ -37,3 +37,15 @@ export const prisma = new Proxy({} as PrismaClient, {
     return typeof value === "function" ? (value as (...args: unknown[]) => unknown).bind(real) : value;
   },
 });
+
+/**
+ * D1 不支持交互式事务。Prisma 仍会在提交时发送一条只有注释的 SQL，
+ * D1 返回 “SQL code did not contain a statement”，整次写入变成系统异常。
+ * Workers 上按顺序执行；本地 SQLite 仍用真正的事务。
+ */
+export async function runWrite<T>(fn: (tx: Prisma.TransactionClient) => Promise<T>): Promise<T> {
+  if (cloudflareBindings()?.DB) {
+    return fn(prisma as unknown as Prisma.TransactionClient);
+  }
+  return prisma.$transaction((tx) => fn(tx));
+}

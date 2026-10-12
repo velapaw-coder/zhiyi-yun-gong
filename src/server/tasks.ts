@@ -1,5 +1,5 @@
 import { Prisma } from "@prisma/client";
-import { prisma } from "@/server/db";
+import { prisma, runWrite } from "@/server/db";
 import { AppError } from "@/server/errors";
 import { assertOps, canReadTask, deny } from "@/server/access";
 import { writeAudit, fieldChanges } from "@/server/audit";
@@ -314,7 +314,7 @@ export async function createTask(
   if (blockers.length > 0 && actor.role !== "ops") await deny(actor, "非运营强制派发");
 
   const code = await nextTaskCode();
-  const task = await prisma.$transaction(async (tx) => {
+  const task = await runWrite(async (tx) => {
     const created = await tx.task.create({
       data: {
         code,
@@ -373,7 +373,7 @@ export async function claimTask(actor: Actor, id: string) {
   await assertWorkerOrOps(actor, task, `领取任务 ${task.code}`);
   if (task.status !== "assigned") throw new AppError("只有已派发的任务可以领取");
   const proxy = actor.role === "ops";
-  await prisma.$transaction(async (tx) => {
+  await runWrite(async (tx) => {
     await tx.task.update({
       where: { id },
       data: { status: "in_progress", actualStartAt: new Date() },
@@ -424,7 +424,7 @@ export async function submitTask(
   const proxy = actor.role === "ops";
   const versionNo = (task.deliveries.at(-1)?.versionNo ?? 0) + 1;
 
-  await prisma.$transaction(async (tx) => {
+  await runWrite(async (tx) => {
     const delivery = await tx.deliveryVersion.create({
       data: {
         taskId: id,
@@ -470,7 +470,7 @@ export async function rejectTask(
   if (comment.length < 2) throw new AppError("质检不通过时，意见必填");
   const delivery = task.deliveries.at(-1);
   if (!delivery) throw new AppError("没有可质检的交付版本");
-  await prisma.$transaction(async (tx) => {
+  await runWrite(async (tx) => {
     await tx.deliveryVersion.update({
       where: { id: delivery.id },
       data: {
@@ -506,7 +506,7 @@ export async function acceptTask(
   if (!delivery) throw new AppError("没有可验收的交付版本");
   const comment = input.comment.trim();
   const now = new Date();
-  await prisma.$transaction(async (tx) => {
+  await runWrite(async (tx) => {
     await tx.deliveryVersion.update({
       where: { id: delivery.id },
       data: {
@@ -551,7 +551,7 @@ export async function cancelTask(actor: Actor, id: string, comment: string) {
   if (terminal(task.status)) throw new AppError("已验收或已取消的任务不能再变更");
   const note = comment.trim();
   if (note.length < 2) throw new AppError("取消任务时备注必填");
-  await prisma.$transaction(async (tx) => {
+  await runWrite(async (tx) => {
     await tx.task.update({ where: { id }, data: { status: "cancelled" } });
     await writeTaskLog(tx, {
       taskId: id,
@@ -576,7 +576,7 @@ export async function reassignTask(actor: Actor, id: string, talentId: string, f
   if (blockers.includes("人才已停用")) throw new AppError("不能改派给已停用人才");
   const soft = blockers.filter((item) => item !== "人才已停用");
   if (soft.length > 0 && !force) throw new AppError(`${soft.join("；")}。如需例外改派，请勾选强制派发。`);
-  await prisma.$transaction(async (tx) => {
+  await runWrite(async (tx) => {
     await tx.task.update({
       where: { id },
       data: { assigneeTalentId: talent.id, forceAssigned: soft.length > 0 || task.forceAssigned },
@@ -625,7 +625,7 @@ export async function editTask(
     { field: "计划截止", old: task.planEndAt.toISOString(), new: planEndAt.toISOString() },
   ]);
   if (changes.length === 0) return;
-  await prisma.$transaction(async (tx) => {
+  await runWrite(async (tx) => {
     await tx.task.update({
       where: { id },
       data: { title, description, planStartAt, planEndAt },
@@ -652,7 +652,7 @@ export async function copyTask(actor: Actor, id: string) {
   const start = new Date();
   const end = new Date(start.getTime() + 7 * 24 * 3600 * 1000);
   const code = await nextTaskCode();
-  const created = await prisma.$transaction(async (tx) => {
+  const created = await runWrite(async (tx) => {
     const copy = await tx.task.create({
       data: {
         code,

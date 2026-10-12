@@ -35,7 +35,9 @@ npm run verify
 
 Workers 上不会往本机磁盘写附件。没有 R2 绑定时上传会直接失败。请求仍经过 Worker，单个附件上限保持 50MB，并受 Cloudflare 请求体大小限制。
 
-D1 目前没有真正的交互式事务。Prisma 的 `$transaction` 在 D1 适配器里会被拆成一条条查询执行，原子性没有保证。本地 SQLite 的事务行为不变。出账、派发这类多表写入在 D1 上有中途失败后留下半成品的可能，这是 MVP 的已知限制。
+D1 没有真正的交互式事务。Prisma 在提交时还会发一条只有注释的 SQL，D1 会拒绝并让整次写入失败。Workers 上的任务、领取、质检、出账改为按顺序写入，不再调用 `$transaction`。本地 SQLite 仍使用事务。多表写入若中途失败，D1 上可能留下半成品。
+
+种子 SQL 里的时间是整数毫秒，Prisma 新写入的是 ISO 字符串。两种值出现在同一列时，详情页会读失败或一直转圈。`scripts/patch-prisma-d1.mjs` 在读出时把这一列统一成 ISO 时间。
 
 `wrangler.toml` 已写入账号 `d0e845fde248a912a971bdeb055c6bd4`、D1 `zhiyi-yun-gong`（`b23791bd-f7ac-41c9-8140-9088ed998df6`）和 R2 桶 `zhiyi-yun-gong-uploads`。`SESSION_SECRET` 用 `wrangler secret` 放在账号里，不要写进仓库。
 

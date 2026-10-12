@@ -1,4 +1,4 @@
-import { prisma } from "@/server/db";
+import { prisma, runWrite } from "@/server/db";
 import { AppError } from "@/server/errors";
 import { assertOps, canReadEnterprise, deny } from "@/server/access";
 import { writeAudit } from "@/server/audit";
@@ -171,7 +171,7 @@ export async function buildBillDraft(actor: Actor, enterpriseId: string, yearMon
   };
 
   const code = existing?.code ?? (await nextBillCode());
-  const bill = await prisma.$transaction(async (tx) => {
+  const bill = await runWrite(async (tx) => {
     const saved = existing
       ? await tx.bill.update({
           where: { id: existing.id },
