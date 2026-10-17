@@ -36,8 +36,8 @@ export default async function LedgerPage({ params }: { params: Promise<{ id: str
         {LEDGER_SLOTS.map((slot) => {
           const files = ledger.files.filter((file) => file.ledgerSlot === slot);
           return (
-            <section key={slot} className="rounded-xl bg-card p-4 ring-1 ring-foreground/10">
-              <h2 className="font-medium">{LEDGER_SLOT[slot]}</h2>
+            <section key={slot} className="rounded-xl bg-card p-4 ring-1 ring-zy-line shadow-zy">
+              <h2 className="font-bold text-zy-deep">{LEDGER_SLOT[slot]}</h2>
               <ul className="mt-3 space-y-2 text-sm">
                 {files.map((file) => (
                   <li key={file.id} className="flex items-center justify-between gap-3">

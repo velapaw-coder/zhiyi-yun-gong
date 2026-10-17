@@ -39,13 +39,13 @@ export default async function BillPage({ params }: { params: Promise<{ id: strin
           ["增减项", adjustmentSum],
           ["应付合计", bill.totalAmount],
         ].map(([label, amount]) => (
-          <div key={String(label)} className="rounded-xl bg-card p-4 ring-1 ring-foreground/10">
+          <div key={String(label)} className="rounded-xl bg-card p-4 ring-1 ring-zy-line shadow-zy">
             <p className="text-xs text-muted-foreground">{label}</p>
             <p className="num mt-1 text-xl font-semibold">{fenToYuan(Number(amount))}</p>
           </div>
         ))}
       </div>
-      <div className="overflow-x-auto rounded-xl bg-card ring-1 ring-foreground/10">
+      <div className="overflow-x-auto rounded-xl bg-card ring-1 ring-zy-line shadow-zy">
         <table className="w-full min-w-[680px] text-sm">
           <thead className="bg-muted/70 text-left text-muted-foreground">
             <tr>

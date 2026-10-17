@@ -30,7 +30,7 @@ export function GenerateBillForm({
   const { error, pending, submit } = useSubmit();
   return (
     <form
-      className="grid gap-3 rounded-xl bg-card p-4 ring-1 ring-foreground/10 md:grid-cols-[1fr_180px_auto]"
+      className="grid gap-3 rounded-xl bg-card p-4 ring-1 ring-zy-line shadow-zy md:grid-cols-[1fr_180px_auto]"
       onSubmit={(event) => {
         event.preventDefault();
         void submit(
@@ -95,7 +95,7 @@ export function BillOps({
       <FormNote message={saved ? "已更新" : null} />
       {status === "draft" ? (
         <form
-          className="grid gap-3 rounded-xl bg-card p-4 ring-1 ring-foreground/10 md:grid-cols-3"
+          className="grid gap-3 rounded-xl bg-card p-4 ring-1 ring-zy-line shadow-zy md:grid-cols-3"
           onSubmit={(event) => {
             event.preventDefault();
             const form = event.currentTarget;
@@ -147,7 +147,7 @@ export function BillOps({
       {status === "issued" || status === "confirmed" ? (
         <div className="grid gap-4 md:grid-cols-2">
           <form
-            className="grid gap-3 rounded-xl bg-card p-4 ring-1 ring-foreground/10"
+            className="grid gap-3 rounded-xl bg-card p-4 ring-1 ring-zy-line shadow-zy"
             onSubmit={(event) => {
               event.preventDefault();
               void submit(() => updateInvoiceAction(id, new FormData(event.currentTarget)));
@@ -171,7 +171,7 @@ export function BillOps({
             </Button>
           </form>
           <form
-            className="grid gap-3 rounded-xl bg-card p-4 ring-1 ring-foreground/10"
+            className="grid gap-3 rounded-xl bg-card p-4 ring-1 ring-zy-line shadow-zy"
             onSubmit={(event) => {
               event.preventDefault();
               void submit(() => updatePaymentAction(id, new FormData(event.currentTarget)));
@@ -217,7 +217,7 @@ export function BillOps({
       ) : null}
       {status !== "voided" ? (
         <form
-          className="grid gap-3 rounded-xl bg-card p-4 ring-1 ring-foreground/10"
+          className="grid gap-3 rounded-xl bg-card p-4 ring-1 ring-zy-line shadow-zy"
           onSubmit={(event) => {
             event.preventDefault();
             void submit(() => voidBillAction(id, new FormData(event.currentTarget)));

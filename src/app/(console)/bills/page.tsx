@@ -48,7 +48,7 @@ export default async function BillsPage({
       <form method="get" className="mb-4 flex flex-wrap items-end gap-2">
         <Input name="yearMonth" type="month" defaultValue={yearMonth} className="w-40" />
         {actor.role === "ops" ? (
-          <select name="enterpriseId" className={`${selectClass} w-48`} defaultValue={enterpriseId}>
+          <select name="enterpriseId" className={`${selectClass} w-48!`} defaultValue={enterpriseId}>
             <option value="">全部企业</option>
             {filterEnterprises.map((item) => (
               <option key={item.id} value={item.id}>
@@ -64,7 +64,7 @@ export default async function BillsPage({
       {rows.length === 0 ? (
         <EmptyState title="没有可见账单" hint={actor.role === "ops" ? "选择企业和月份，生成一份草稿。" : "运营出账后，账单会出现在这里。"} />
       ) : (
-        <div className="overflow-x-auto rounded-xl bg-card ring-1 ring-foreground/10">
+        <div className="overflow-x-auto rounded-xl bg-card ring-1 ring-zy-line shadow-zy">
           <table className="w-full min-w-[760px] text-sm">
             <thead className="bg-muted/70 text-left text-muted-foreground">
               <tr>

@@ -56,7 +56,7 @@ export default async function PositionPage({ params }: { params: Promise<{ id: s
       ) : (
         <div>
           <ReadOnlyBanner />
-          <dl className="grid gap-4 rounded-xl bg-card p-4 text-sm ring-1 ring-foreground/10">
+          <dl className="grid gap-4 rounded-xl bg-card p-4 text-sm ring-1 ring-zy-line shadow-zy">
             <div>
               <dt className="text-muted-foreground">结算</dt>
               <dd className="mt-1">

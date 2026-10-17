@@ -39,7 +39,7 @@ export default async function EnterprisesPage({
       />
       <form method="get" className="mb-4 flex flex-wrap items-end gap-2">
         <Input name="q" defaultValue={q} placeholder="搜索企业" className="w-56" />
-        <select name="status" className={`${selectClass} w-36`} defaultValue={status}>
+        <select name="status" className={`${selectClass} w-36!`} defaultValue={status}>
           <option value="">全部状态</option>
           {Object.entries(ENTERPRISE_STATUS).map(([value, label]) => (
             <option key={value} value={value}>
@@ -54,7 +54,7 @@ export default async function EnterprisesPage({
       {rows.length === 0 ? (
         <EmptyState title="没有匹配的企业" hint="换个关键词，或新建第一家签约客户。" />
       ) : (
-        <div className="overflow-x-auto rounded-xl bg-card ring-1 ring-foreground/10">
+        <div className="overflow-x-auto rounded-xl bg-card ring-1 ring-zy-line shadow-zy">
           <table className="w-full min-w-[720px] text-sm">
             <thead className="bg-muted/70 text-left text-muted-foreground">
               <tr>

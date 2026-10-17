@@ -5,9 +5,24 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
+  --color-zy-deep: var(--zy-deep);
+  --color-zy-deeper: var(--zy-deeper);
+  --color-zy-blue: var(--zy-blue);
+  --color-zy-cyan: var(--zy-cyan);
+  --color-zy-teal: var(--zy-teal);
+  --color-zy-green: var(--zy-green);
+  --color-zy-gold: var(--zy-gold);
+  --color-zy-gold-soft: var(--zy-gold-soft);
+  --color-zy-rose: var(--zy-rose);
+  --color-zy-text: var(--zy-text);
+  --color-zy-muted: var(--zy-muted);
+  --color-zy-pale: var(--zy-pale);
+  --color-zy-paper: var(--zy-paper);
+  --color-zy-line: var(--zy-line);
+  --shadow-zy: var(--zy-shadow);
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: "WenQuanYi Micro Hei", "PingFang SC", "Hiragino Sans GB", "Noto Sans SC", "Microsoft YaHei", sans-serif;
+  --font-sans: "PingFang SC", "Microsoft YaHei", "Hiragino Sans GB", "Noto Sans SC", "Noto Sans CJK SC", "WenQuanYi Micro Hei", Arial, sans-serif;
   --font-mono: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
   --font-heading: var(--font-sans);
   --color-sidebar-ring: var(--sidebar-ring);
@@ -49,38 +64,55 @@
 }
 
 :root {
-  --background: oklch(0.968 0.012 95);
-  --foreground: oklch(0.27 0.03 165);
-  --card: oklch(0.995 0.004 95);
-  --card-foreground: oklch(0.27 0.03 165);
-  --popover: oklch(0.995 0.004 95);
-  --popover-foreground: oklch(0.27 0.03 165);
-  --primary: oklch(0.4 0.075 162);
-  --primary-foreground: oklch(0.985 0.01 95);
-  --secondary: oklch(0.94 0.016 95);
-  --secondary-foreground: oklch(0.32 0.03 165);
-  --muted: oklch(0.945 0.014 95);
-  --muted-foreground: oklch(0.48 0.03 160);
-  --accent: oklch(0.93 0.03 85);
-  --accent-foreground: oklch(0.35 0.05 55);
-  --destructive: oklch(0.52 0.16 28);
-  --border: oklch(0.88 0.02 90);
-  --input: oklch(0.86 0.02 90);
-  --ring: oklch(0.4 0.075 162);
-  --chart-1: oklch(0.87 0 0);
-  --chart-2: oklch(0.556 0 0);
-  --chart-3: oklch(0.439 0 0);
-  --chart-4: oklch(0.371 0 0);
-  --chart-5: oklch(0.269 0 0);
+  /* SmartWing 品牌色板（与首页参考稿一致） */
+  --zy-deep: #063345;
+  --zy-deeper: #042b3a;
+  --zy-blue: #0a4d68;
+  --zy-cyan: #0fa3c4;
+  --zy-teal: #0b7c95;
+  --zy-green: #2e9e6b;
+  --zy-gold: #e3a733;
+  --zy-gold-soft: #f4c55a;
+  --zy-rose: #c2413a;
+  --zy-text: #16232b;
+  --zy-muted: #4a5b66;
+  --zy-pale: #e3eef3;
+  --zy-paper: #f8fafb;
+  --zy-line: #d5dee4;
+  --zy-shadow: 0 8px 25px rgba(10, 77, 104, 0.045);
+
+  --background: var(--zy-paper);
+  --foreground: var(--zy-text);
+  --card: #ffffff;
+  --card-foreground: var(--zy-text);
+  --popover: #ffffff;
+  --popover-foreground: var(--zy-text);
+  --primary: var(--zy-blue);
+  --primary-foreground: #ffffff;
+  --secondary: var(--zy-pale);
+  --secondary-foreground: var(--zy-blue);
+  --muted: #eef3f6;
+  --muted-foreground: var(--zy-muted);
+  --accent: #fbf3e2;
+  --accent-foreground: #7a5512;
+  --destructive: var(--zy-rose);
+  --border: var(--zy-line);
+  --input: #cbd8de;
+  --ring: var(--zy-cyan);
+  --chart-1: var(--zy-blue);
+  --chart-2: var(--zy-cyan);
+  --chart-3: var(--zy-green);
+  --chart-4: var(--zy-gold);
+  --chart-5: var(--zy-deep);
   --radius: 0.7rem;
-  --sidebar: oklch(0.26 0.035 165);
-  --sidebar-foreground: oklch(0.95 0.015 95);
-  --sidebar-primary: oklch(0.8 0.11 85);
-  --sidebar-primary-foreground: oklch(0.24 0.04 165);
-  --sidebar-accent: oklch(0.33 0.04 165);
-  --sidebar-accent-foreground: oklch(0.97 0.01 95);
-  --sidebar-border: oklch(0.37 0.03 165);
-  --sidebar-ring: oklch(0.8 0.11 85);
+  --sidebar: var(--zy-deep);
+  --sidebar-foreground: #deecf1;
+  --sidebar-primary: var(--zy-gold);
+  --sidebar-primary-foreground: #172a34;
+  --sidebar-accent: rgba(255, 255, 255, 0.08);
+  --sidebar-accent-foreground: #ffffff;
+  --sidebar-border: rgba(210, 240, 248, 0.14);
+  --sidebar-ring: var(--zy-cyan);
 }
 
 .dark {
@@ -121,14 +153,59 @@
   * {
     @apply border-border outline-ring/50;
   }
+  html {
+    @apply font-sans;
+    scroll-behavior: smooth;
+  }
   body {
     @apply bg-background text-foreground;
-    background-image: radial-gradient(ellipse at top, oklch(0.99 0.02 95), transparent 58%);
+    line-height: 1.6;
   }
   .num {
     font-variant-numeric: tabular-nums;
   }
-  html {
-    @apply font-sans;
+}
+
+/* 共用的品牌组件样式：首页、登录页与后台统一调性 */
+@utility zy-surface {
+  background-color: var(--card);
+  border-radius: calc(var(--radius) * 1.4);
+  box-shadow: 0 0 0 1px var(--zy-line), var(--zy-shadow);
+}
+
+@utility zy-kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  color: var(--zy-teal);
+  &::before {
+    content: "";
+    width: 1.5rem;
+    height: 2px;
+    border-radius: 2px;
+    background: var(--zy-gold);
   }
+}
+
+@utility zy-hero-bg {
+  background: radial-gradient(circle at 83% 35%, #176183 0%, transparent 35%),
+    linear-gradient(115deg, #052b3c 0%, #06445e 60%, #0c5673 100%);
+}
+
+@utility zy-sidebar-bg {
+  background: radial-gradient(circle at 120% 0%, rgba(15, 163, 196, 0.22) 0%, transparent 45%),
+    linear-gradient(180deg, #063345 0%, #052b3c 100%);
+}
+
+/* 后台表格：浅蓝表头、细线分隔 */
+[data-slot="table-header"] tr {
+  background: #f1f6f8;
+}
+[data-slot="table-head"] {
+  color: var(--zy-deep);
+  font-weight: 650;
+  font-size: 0.8rem;
 }

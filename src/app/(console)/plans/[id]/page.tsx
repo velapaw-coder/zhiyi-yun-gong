@@ -51,7 +51,7 @@ export default async function PlanPage({ params }: { params: Promise<{ id: strin
       ) : (
         <div>
           <ReadOnlyBanner />
-          <dl className="grid gap-3 rounded-xl bg-card p-4 text-sm ring-1 ring-foreground/10 sm:grid-cols-3">
+          <dl className="grid gap-3 rounded-xl bg-card p-4 text-sm ring-1 ring-zy-line shadow-zy sm:grid-cols-3">
             <div>
               <dt className="text-muted-foreground">残保金基数</dt>
               <dd className="num mt-1">{fenToYuan(plan.disabilityFundBase)} 元</dd>
@@ -69,7 +69,7 @@ export default async function PlanPage({ params }: { params: Promise<{ id: strin
         </div>
       )}
       <section className="mt-6">
-        <h2 className="mb-2 font-medium">附件</h2>
+        <h2 className="mb-2 font-bold text-zy-deep">附件</h2>
         <ul className="space-y-2 text-sm">
           {plan.files.map((file) => (
             <li key={file.id}>

@@ -28,7 +28,7 @@ export default async function TaskDetailPage({ params }: { params: Promise<{ id:
         actions={<StatusBadge map={TASK_STATUS} value={task.status} />}
       />
       {actor.role === "enterprise" ? <ReadOnlyBanner /> : null}
-      <dl className="mb-4 grid gap-3 rounded-xl bg-card p-4 text-sm ring-1 ring-foreground/10 sm:grid-cols-2 lg:grid-cols-4">
+      <dl className="mb-4 grid gap-3 rounded-xl bg-card p-4 text-sm ring-1 ring-zy-line shadow-zy sm:grid-cols-2 lg:grid-cols-4">
         <div>
           <dt className="text-muted-foreground">执行人</dt>
           <dd className="mt-1">
@@ -75,7 +75,7 @@ export default async function TaskDetailPage({ params }: { params: Promise<{ id:
           }}
         />
       ) : null}
-      <details className="mb-6 rounded-xl bg-card p-4 ring-1 ring-foreground/10" open>
+      <details className="mb-6 rounded-xl bg-card p-4 ring-1 ring-zy-line shadow-zy" open>
         <summary className="cursor-pointer font-medium">任务要求、交付标准、质检规则</summary>
         <div className="mt-3 grid gap-4 text-sm leading-6 md:grid-cols-3">
           <div>
@@ -94,8 +94,8 @@ export default async function TaskDetailPage({ params }: { params: Promise<{ id:
       </details>
       <div className="grid gap-6 lg:grid-cols-5">
         <section className="lg:col-span-3">
-          <h2 className="mb-3 font-medium">追溯时间线</h2>
-          <ol className="rounded-xl bg-card p-4 ring-1 ring-foreground/10">
+          <h2 className="mb-3 font-bold text-zy-deep">追溯时间线</h2>
+          <ol className="rounded-xl bg-card p-4 ring-1 ring-zy-line shadow-zy">
             {task.logs.map((log, index) => (
               <li key={log.id} className="grid grid-cols-[16px_1fr] gap-3">
                 <div className="relative">
@@ -136,11 +136,11 @@ export default async function TaskDetailPage({ params }: { params: Promise<{ id:
           </ol>
         </section>
         <section className="lg:col-span-2">
-          <h2 className="mb-3 font-medium">交付物</h2>
+          <h2 className="mb-3 font-bold text-zy-deep">交付物</h2>
           {task.deliveries.length === 0 ? (
-            <p className="rounded-xl bg-card p-4 text-sm text-muted-foreground ring-1 ring-foreground/10">还没有提交。</p>
+            <p className="rounded-xl bg-card p-4 text-sm text-muted-foreground ring-1 ring-zy-line shadow-zy">还没有提交。</p>
           ) : (
-            <Tabs defaultValue={String(current?.versionNo ?? 1)} className="rounded-xl bg-card p-4 ring-1 ring-foreground/10">
+            <Tabs defaultValue={String(current?.versionNo ?? 1)} className="rounded-xl bg-card p-4 ring-1 ring-zy-line shadow-zy">
               <TabsList className="flex h-auto flex-wrap">
                 {task.deliveries.map((delivery) => (
                   <TabsTrigger key={delivery.id} value={String(delivery.versionNo)}>
@@ -187,15 +187,15 @@ export default async function TaskDetailPage({ params }: { params: Promise<{ id:
               ))}
             </Tabs>
           )}
-          <h2 className="mt-6 mb-3 font-medium">质检意见</h2>
+          <h2 className="mt-6 mb-3 font-bold text-zy-deep">质检意见</h2>
           <div className="grid gap-3">
             {task.deliveries.filter((item) => item.qaResult !== "pending" || item.qaComment).length === 0 ? (
-              <p className="rounded-xl bg-card p-4 text-sm text-muted-foreground ring-1 ring-foreground/10">还没有质检结论。</p>
+              <p className="rounded-xl bg-card p-4 text-sm text-muted-foreground ring-1 ring-zy-line shadow-zy">还没有质检结论。</p>
             ) : (
               task.deliveries
                 .filter((item) => item.qaResult !== "pending" || item.qaComment)
                 .map((delivery) => (
-                  <article key={delivery.id} className="rounded-xl bg-card p-4 text-sm ring-1 ring-foreground/10">
+                  <article key={delivery.id} className="rounded-xl bg-card p-4 text-sm ring-1 ring-zy-line shadow-zy">
                     <div className="flex items-center justify-between gap-2">
                       <span className="font-medium">v{delivery.versionNo}</span>
                       <StatusBadge map={QA_RESULT} value={delivery.qaResult} />
@@ -214,8 +214,8 @@ export default async function TaskDetailPage({ params }: { params: Promise<{ id:
         </section>
       </div>
       <section className="mt-8">
-        <h2 className="mb-3 font-medium">操作日志</h2>
-        <div className="overflow-x-auto rounded-xl bg-card ring-1 ring-foreground/10">
+        <h2 className="mb-3 font-bold text-zy-deep">操作日志</h2>
+        <div className="overflow-x-auto rounded-xl bg-card ring-1 ring-zy-line shadow-zy">
           <table className="w-full min-w-[760px] text-sm">
             <thead className="bg-muted/70 text-left text-muted-foreground">
               <tr>

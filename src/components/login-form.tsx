@@ -51,17 +51,17 @@ export function LoginForm() {
       <Field label="密码" required>
         <Input type="password" autoComplete="current-password" value={password} onChange={(event) => setPassword(event.target.value)} />
       </Field>
-      <Button type="submit" disabled={pending} className="h-9">
+      <Button type="submit" disabled={pending} size="lg" className="w-full">
         {pending ? "正在进入…" : "进入平台"}
       </Button>
-      <div className="rounded-xl border border-border bg-muted/50 p-3">
+      <div className="rounded-xl border border-zy-line bg-zy-paper p-3">
         <p className="text-xs font-medium text-muted-foreground">演示账号，密码都是 Zhiyi#2026。点一行即可填入。</p>
         <ul className="mt-2 grid gap-1">
           {DEMOS.map(([name, label]) => (
             <li key={name}>
               <button
                 type="button"
-                className="flex w-full items-center justify-between rounded-md px-2 py-1.5 text-left text-sm hover:bg-card"
+                className="flex w-full items-center justify-between rounded-md px-2 py-1.5 text-left text-sm hover:bg-zy-pale"
                 onClick={() => {
                   setLoginName(name);
                   setPassword("Zhiyi#2026");

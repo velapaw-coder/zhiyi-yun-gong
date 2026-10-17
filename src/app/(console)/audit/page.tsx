@@ -152,7 +152,7 @@ function formatChanges(raw: string | null) {
 
 function LogTable({ headers, rows }: { headers: string[]; rows: string[][] }) {
   return (
-    <div className="overflow-x-auto rounded-xl bg-card ring-1 ring-foreground/10">
+    <div className="overflow-x-auto rounded-xl bg-card ring-1 ring-zy-line shadow-zy">
       <table className="w-full min-w-[720px] text-sm">
         <thead className="bg-muted/70 text-left text-muted-foreground">
           <tr>

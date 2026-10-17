@@ -42,10 +42,10 @@ export default async function EnterpriseDetailPage({ params }: { params: Promise
       </div>
       {enterprise.remark ? <p className="mb-6 whitespace-pre-wrap text-sm leading-6">{enterprise.remark}</p> : null}
       <section>
-        <h2 className="mb-3 font-medium">方案</h2>
+        <h2 className="mb-3 font-bold text-zy-deep">方案</h2>
         <div className="grid gap-3">
           {enterprise.plans.map((plan) => (
-            <Link key={plan.id} href={`/plans/${plan.id}`} className="rounded-xl bg-card p-4 ring-1 ring-foreground/10 hover:ring-primary/40">
+            <Link key={plan.id} href={`/plans/${plan.id}`} className="rounded-xl bg-card p-4 ring-1 ring-zy-line shadow-zy hover:ring-primary/40">
               <div className="flex flex-wrap items-center justify-between gap-2">
                 <div>
                   <p className="font-medium">
@@ -67,12 +67,12 @@ export default async function EnterpriseDetailPage({ params }: { params: Promise
       </section>
       <section className="mt-8">
         <div className="mb-3 flex items-center justify-between">
-          <h2 className="font-medium">岗位</h2>
+          <h2 className="font-bold text-zy-deep">岗位</h2>
           <Link href={`/positions?enterpriseId=${enterprise.id}`} className="text-sm text-primary hover:underline">
             在岗位列表中查看
           </Link>
         </div>
-        <div className="overflow-x-auto rounded-xl bg-card ring-1 ring-foreground/10">
+        <div className="overflow-x-auto rounded-xl bg-card ring-1 ring-zy-line shadow-zy">
           <table className="w-full min-w-[640px] text-sm">
             <thead className="bg-muted/70 text-left text-muted-foreground">
               <tr>

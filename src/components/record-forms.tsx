@@ -71,7 +71,7 @@ export function EnterpriseForm({
   const { error, pending, saved, submit } = useSubmit();
   return (
     <form
-      className="grid gap-4 rounded-xl bg-card p-4 ring-1 ring-foreground/10 md:grid-cols-2"
+      className="grid gap-4 rounded-xl bg-card p-4 ring-1 ring-zy-line shadow-zy md:grid-cols-2"
       onSubmit={(event) => {
         event.preventDefault();
         const form = new FormData(event.currentTarget);
@@ -184,7 +184,7 @@ export function PlanForm({
   const { error, pending, saved, submit } = useSubmit();
   return (
     <form
-      className="grid gap-4 rounded-xl bg-card p-4 ring-1 ring-foreground/10 md:grid-cols-2"
+      className="grid gap-4 rounded-xl bg-card p-4 ring-1 ring-zy-line shadow-zy md:grid-cols-2"
       onSubmit={(event) => {
         event.preventDefault();
         const form = new FormData(event.currentTarget);
@@ -254,7 +254,7 @@ export function PlanFileForm({ planId }: { planId: string }) {
   const { error, pending, saved, submit } = useSubmit();
   return (
     <form
-      className="mt-4 grid gap-3 rounded-xl bg-card p-4 ring-1 ring-foreground/10"
+      className="mt-4 grid gap-3 rounded-xl bg-card p-4 ring-1 ring-zy-line shadow-zy"
       onSubmit={(event) => {
         event.preventDefault();
         const form = event.currentTarget;
@@ -324,7 +324,7 @@ export function PositionForm({
   );
   return (
     <form
-      className="grid gap-4 rounded-xl bg-card p-4 ring-1 ring-foreground/10 md:grid-cols-2"
+      className="grid gap-4 rounded-xl bg-card p-4 ring-1 ring-zy-line shadow-zy md:grid-cols-2"
       onSubmit={(event) => {
         event.preventDefault();
         const form = new FormData(event.currentTarget);
@@ -463,7 +463,7 @@ export function TalentForm({
   const statuses = Object.entries(TALENT_STATUS).filter(([value]) => value !== "on_duty" || defaults?.status === "on_duty");
   return (
     <form
-      className="grid gap-4 rounded-xl bg-card p-4 ring-1 ring-foreground/10 md:grid-cols-2"
+      className="grid gap-4 rounded-xl bg-card p-4 ring-1 ring-zy-line shadow-zy md:grid-cols-2"
       onSubmit={(event) => {
         event.preventDefault();
         const form = new FormData(event.currentTarget);
@@ -556,7 +556,7 @@ export function BindForm({
   const { error, warning, pending, submit } = useSubmit();
   return (
     <form
-      className="grid gap-3 rounded-xl bg-card p-4 ring-1 ring-foreground/10"
+      className="grid gap-3 rounded-xl bg-card p-4 ring-1 ring-zy-line shadow-zy"
       onSubmit={(event) => {
         event.preventDefault();
         void submit(() => bindTalentAction(talentId, new FormData(event.currentTarget)));
@@ -635,7 +635,7 @@ export function LedgerCreateForm({
   const { error, pending, submit } = useSubmit();
   return (
     <form
-      className="grid gap-4 rounded-xl bg-card p-4 ring-1 ring-foreground/10 md:grid-cols-2"
+      className="grid gap-4 rounded-xl bg-card p-4 ring-1 ring-zy-line shadow-zy md:grid-cols-2"
       onSubmit={(event) => {
         event.preventDefault();
         void submit(
@@ -690,7 +690,7 @@ export function LedgerCheckForm({
   const { error, pending, saved, submit } = useSubmit();
   return (
     <form
-      className="grid gap-3 rounded-xl bg-card p-4 ring-1 ring-foreground/10"
+      className="grid gap-3 rounded-xl bg-card p-4 ring-1 ring-zy-line shadow-zy"
       onSubmit={(event) => {
         event.preventDefault();
         void submit(() => updateLedgerAction(id, new FormData(event.currentTarget)));
@@ -729,7 +729,7 @@ export function UserCreateForm({
   const [role, setRole] = useState("ops");
   return (
     <form
-      className="grid gap-3 rounded-xl bg-card p-4 ring-1 ring-foreground/10"
+      className="grid gap-3 rounded-xl bg-card p-4 ring-1 ring-zy-line shadow-zy"
       onSubmit={(event) => {
         event.preventDefault();
         const form = event.currentTarget;

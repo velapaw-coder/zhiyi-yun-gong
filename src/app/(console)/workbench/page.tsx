@@ -21,11 +21,11 @@ export default async function HomePage() {
 
   if (data.kind === "ops") {
     const cards = [
-      { label: "待质检", value: data.pendingQa, href: "/tasks?status=submitted" },
-      { label: "逾期待办", value: data.overdue, href: "/tasks?overdue=1" },
-      { label: "返工中", value: data.rework, href: "/tasks?status=rework" },
-      { label: "台账异常", value: data.anomaly, href: "/ledgers?checkStatus=anomaly" },
-      { label: "本月已验收", value: data.acceptedMonth, href: "/tasks?status=accepted" },
+      { label: "待质检", value: data.pendingQa, href: "/tasks?status=submitted", accent: "before:bg-zy-gold", ink: "text-[#8a5d0c]" },
+      { label: "逾期待办", value: data.overdue, href: "/tasks?overdue=1", accent: "before:bg-zy-rose", ink: "text-zy-rose" },
+      { label: "返工中", value: data.rework, href: "/tasks?status=rework", accent: "before:bg-[#e07a3a]", ink: "text-[#a24a12]" },
+      { label: "台账异常", value: data.anomaly, href: "/ledgers?checkStatus=anomaly", accent: "before:bg-zy-cyan", ink: "text-zy-teal" },
+      { label: "本月已验收", value: data.acceptedMonth, href: "/tasks?status=accepted", accent: "before:bg-zy-green", ink: "text-zy-green" },
     ];
     return (
       <div>
@@ -41,16 +41,20 @@ export default async function HomePage() {
         />
         <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
           {cards.map((card) => (
-            <Link key={card.label} href={card.href} className="rounded-xl bg-card p-4 ring-1 ring-foreground/10 hover:ring-primary/40">
-              <p className="text-xs text-muted-foreground">{card.label}</p>
-              <p className="num mt-2 text-3xl font-semibold">{card.value}</p>
+            <Link
+              key={card.label}
+              href={card.href}
+              className={`relative overflow-hidden rounded-xl bg-card p-4 pt-5 ring-1 ring-zy-line shadow-zy transition before:absolute before:inset-x-0 before:top-0 before:h-1 hover:-translate-y-0.5 hover:ring-zy-cyan/60 ${card.accent}`}
+            >
+              <p className="text-xs font-medium text-muted-foreground">{card.label}</p>
+              <p className={`num mt-2 text-3xl font-bold ${card.ink}`}>{card.value}</p>
             </Link>
           ))}
         </div>
         <div className="mt-6 grid gap-6 lg:grid-cols-2">
           <section>
-            <h2 className="mb-2 font-medium">最近任务</h2>
-            <div className="divide-y divide-border rounded-xl bg-card ring-1 ring-foreground/10">
+            <h2 className="mb-3 font-bold text-zy-deep">最近任务</h2>
+            <div className="divide-y divide-border rounded-xl bg-card ring-1 ring-zy-line shadow-zy">
               {data.recentTasks.map((task) => (
                 <Link key={task.id} href={`/tasks/${task.id}`} className="flex items-center justify-between gap-3 px-4 py-3 text-sm hover:bg-muted/60">
                   <span>
@@ -65,8 +69,8 @@ export default async function HomePage() {
             </div>
           </section>
           <section>
-            <h2 className="mb-2 font-medium">最近写操作</h2>
-            <div className="divide-y divide-border rounded-xl bg-card ring-1 ring-foreground/10">
+            <h2 className="mb-3 font-bold text-zy-deep">最近写操作</h2>
+            <div className="divide-y divide-border rounded-xl bg-card ring-1 ring-zy-line shadow-zy">
               {data.recentLogs.map((log) => (
                 <div key={log.id} className="px-4 py-3 text-sm">
                   <p>
@@ -94,15 +98,15 @@ export default async function HomePage() {
         />
         <div className="grid gap-3 sm:grid-cols-3">
           {data.counts.map((item) => (
-            <Link key={item.status} href={`/tasks?status=${item.status}`} className="rounded-xl bg-card p-4 ring-1 ring-foreground/10">
+            <Link key={item.status} href={`/tasks?status=${item.status}`} className="rounded-xl bg-card p-4 ring-1 ring-zy-line shadow-zy">
               <p className="text-xs text-muted-foreground">{TASK_STATUS[item.status] ?? item.status}</p>
-              <p className="num mt-2 text-3xl font-semibold">{item._count._all}</p>
+              <p className="num mt-2 text-3xl font-bold text-zy-blue">{item._count._all}</p>
             </Link>
           ))}
           {data.counts.length === 0 ? <p className="text-sm text-muted-foreground">本企业还没有任务。</p> : null}
         </div>
-        <section className="mt-6 rounded-xl bg-card p-4 ring-1 ring-foreground/10">
-          <h2 className="font-medium">最近一张可见账单</h2>
+        <section className="mt-6 rounded-xl bg-card p-4 ring-1 ring-zy-line shadow-zy">
+          <h2 className="font-bold text-zy-deep">最近一张可见账单</h2>
           {data.bill ? (
             <Link href={`/bills/${data.bill.id}`} className="mt-3 flex flex-wrap items-center gap-3 text-sm">
               <span className="font-medium">{data.bill.yearMonth}</span>
@@ -124,14 +128,14 @@ export default async function HomePage() {
       <PageHeader eyebrow="执行端" title={`${actor.displayName}的待办`} description="只显示派给你的任务。领取、提交、按质检意见返工，都在任务详情里完成。" />
       <div className="mb-4 flex flex-wrap gap-2">
         {data.counts.map((item) => (
-          <Link key={item.status} href={`/tasks?status=${item.status}`} className="rounded-full bg-card px-3 py-1 text-sm ring-1 ring-foreground/10">
+          <Link key={item.status} href={`/tasks?status=${item.status}`} className="rounded-full bg-card px-3 py-1 text-sm ring-1 ring-zy-line shadow-zy">
             {TASK_STATUS[item.status] ?? item.status} {item._count._all}
           </Link>
         ))}
       </div>
       <div className="grid gap-3">
         {data.tasks.map((task) => (
-          <Link key={task.id} href={`/tasks/${task.id}`} className="rounded-xl bg-card p-4 ring-1 ring-foreground/10 hover:ring-primary/40">
+          <Link key={task.id} href={`/tasks/${task.id}`} className="rounded-xl bg-card p-4 ring-1 ring-zy-line shadow-zy hover:ring-primary/40">
             <div className="flex items-start justify-between gap-3">
               <div>
                 <p className="font-medium">{task.title}</p>

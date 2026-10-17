@@ -45,7 +45,7 @@ export default async function PositionsPage({
       <form method="get" className="mb-4 flex flex-wrap items-end gap-2">
         <Input name="q" defaultValue={q} placeholder="搜索岗位" className="w-48" />
         {actor.role === "ops" ? (
-          <select name="enterpriseId" className={`${selectClass} w-48`} defaultValue={enterpriseId}>
+          <select name="enterpriseId" className={`${selectClass} w-48!`} defaultValue={enterpriseId}>
             <option value="">全部企业</option>
             {enterprises.map((item) => (
               <option key={item.id} value={item.id}>
@@ -54,7 +54,7 @@ export default async function PositionsPage({
             ))}
           </select>
         ) : null}
-        <select name="status" className={`${selectClass} w-32`} defaultValue={status}>
+        <select name="status" className={`${selectClass} w-32!`} defaultValue={status}>
           <option value="">全部状态</option>
           {Object.entries(POSITION_STATUS).map(([value, label]) => (
             <option key={value} value={value}>
@@ -69,7 +69,7 @@ export default async function PositionsPage({
       {rows.length === 0 ? (
         <EmptyState title="没有岗位" hint="启用岗位之后才能派发任务。" />
       ) : (
-        <div className="overflow-x-auto rounded-xl bg-card ring-1 ring-foreground/10">
+        <div className="overflow-x-auto rounded-xl bg-card ring-1 ring-zy-line shadow-zy">
           <table className="w-full min-w-[760px] text-sm">
             <thead className="bg-muted/70 text-left text-muted-foreground">
               <tr>

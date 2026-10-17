@@ -64,7 +64,7 @@ export default async function TasksPage({
       <form method="get" className="mb-4 flex flex-wrap items-end gap-2">
         <Input name="q" defaultValue={q} placeholder="标题、编号或执行人" className="w-52" />
         {actor.role === "ops" ? (
-          <select name="enterpriseId" className={`${selectClass} w-44`} defaultValue={enterpriseId}>
+          <select name="enterpriseId" className={`${selectClass} w-44!`} defaultValue={enterpriseId}>
             <option value="">全部企业</option>
             {enterprises.map((item) => (
               <option key={item.id} value={item.id}>
@@ -73,7 +73,7 @@ export default async function TasksPage({
             ))}
           </select>
         ) : null}
-        <select name="status" className={`${selectClass} w-32`} defaultValue={status}>
+        <select name="status" className={`${selectClass} w-32!`} defaultValue={status}>
           <option value="">全部状态</option>
           {Object.entries(TASK_STATUS).map(([value, label]) => (
             <option key={value} value={value}>
@@ -81,7 +81,7 @@ export default async function TasksPage({
             </option>
           ))}
         </select>
-        <label className="flex h-8 items-center gap-2 rounded-lg border border-input px-2 text-sm">
+        <label className="flex h-9 items-center gap-2 rounded-lg border border-input bg-white px-2.5 text-sm">
           <input type="checkbox" name="overdue" value="1" defaultChecked={overdue} />
           只看逾期
         </label>
@@ -106,12 +106,12 @@ export default async function TasksPage({
               return (
                 <section key={column} className="w-72 shrink-0">
                   <div className="mb-2 flex items-center justify-between px-1">
-                    <h2 className="text-sm font-medium">{TASK_STATUS[column]}</h2>
+                    <h2 className="text-sm font-bold text-zy-deep">{TASK_STATUS[column]}</h2>
                     <span className="num text-xs text-muted-foreground">{cards.length}</span>
                   </div>
                   <div className="grid gap-2">
                     {cards.map((card) => (
-                      <Link key={card.id} href={`/tasks/${card.id}`} className="rounded-xl bg-card p-3 ring-1 ring-foreground/10 hover:ring-primary/40">
+                      <Link key={card.id} href={`/tasks/${card.id}`} className="rounded-xl bg-card p-3 ring-1 ring-zy-line shadow-zy hover:ring-primary/40">
                         <p className="text-sm font-medium leading-5">{card.title}</p>
                         <p className="mt-2 text-xs text-muted-foreground">
                           {card.code}
@@ -131,7 +131,7 @@ export default async function TasksPage({
           </div>
         </div>
       ) : (
-        <div className="overflow-x-auto rounded-xl bg-card ring-1 ring-foreground/10">
+        <div className="overflow-x-auto rounded-xl bg-card ring-1 ring-zy-line shadow-zy">
           <table className="w-full min-w-[760px] text-sm">
             <thead className="bg-muted/70 text-left text-muted-foreground">
               <tr>

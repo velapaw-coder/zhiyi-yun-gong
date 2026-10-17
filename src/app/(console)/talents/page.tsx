@@ -38,7 +38,7 @@ export default async function TalentsPage({
       />
       <form method="get" className="mb-4 flex flex-wrap items-end gap-2">
         <Input name="q" defaultValue={q} placeholder="姓名、编号或电话" className="w-56" />
-        <select name="status" className={`${selectClass} w-36`} defaultValue={status}>
+        <select name="status" className={`${selectClass} w-36!`} defaultValue={status}>
           <option value="">全部状态</option>
           {Object.entries(TALENT_STATUS).map(([value, label]) => (
             <option key={value} value={value}>
@@ -53,7 +53,7 @@ export default async function TalentsPage({
       {rows.length === 0 ? (
         <EmptyState title="没有人才档案" hint="录入后完成培训，再绑定到企业岗位。" />
       ) : (
-        <div className="overflow-x-auto rounded-xl bg-card ring-1 ring-foreground/10">
+        <div className="overflow-x-auto rounded-xl bg-card ring-1 ring-zy-line shadow-zy">
           <table className="w-full min-w-[860px] text-sm">
             <thead className="bg-muted/70 text-left text-muted-foreground">
               <tr>

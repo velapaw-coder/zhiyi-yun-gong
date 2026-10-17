@@ -49,7 +49,7 @@ export default async function LedgersPage({
         <Input name="q" defaultValue={q} placeholder="人才姓名" className="w-40" />
         <Input name="yearMonth" type="month" defaultValue={yearMonth || currentYearMonth()} className="w-40" />
         {actor.role === "ops" ? (
-          <select name="enterpriseId" className={`${selectClass} w-44`} defaultValue={enterpriseId}>
+          <select name="enterpriseId" className={`${selectClass} w-44!`} defaultValue={enterpriseId}>
             <option value="">全部企业</option>
             {enterprises.map((item) => (
               <option key={item.id} value={item.id}>
@@ -58,7 +58,7 @@ export default async function LedgersPage({
             ))}
           </select>
         ) : null}
-        <select name="checkStatus" className={`${selectClass} w-32`} defaultValue={checkStatus}>
+        <select name="checkStatus" className={`${selectClass} w-32!`} defaultValue={checkStatus}>
           <option value="">全部核对</option>
           {Object.entries(LEDGER_STATUS).map(([value, label]) => (
             <option key={value} value={value}>
@@ -73,7 +73,7 @@ export default async function LedgersPage({
       {rows.length === 0 ? (
         <EmptyState title="这个月还没有台账" hint="运营可以按人按月建档，再把四类凭证传上去。" />
       ) : (
-        <div className="overflow-x-auto rounded-xl bg-card ring-1 ring-foreground/10">
+        <div className="overflow-x-auto rounded-xl bg-card ring-1 ring-zy-line shadow-zy">
           <table className="w-full min-w-[760px] text-sm">
             <thead className="bg-muted/70 text-left text-muted-foreground">
               <tr>

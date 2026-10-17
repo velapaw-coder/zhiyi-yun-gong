@@ -40,7 +40,7 @@ export function TaskCreateForm({
 
   return (
     <form
-      className="grid gap-4 rounded-xl bg-card p-4 ring-1 ring-foreground/10"
+      className="grid gap-4 rounded-xl bg-card p-4 ring-1 ring-zy-line shadow-zy"
       onSubmit={(event) => {
         event.preventDefault();
         void submit(
@@ -166,7 +166,7 @@ export function TaskActions({
   }, [ops, task.status]);
 
   return (
-    <div className="mb-6 rounded-xl bg-card p-4 ring-1 ring-foreground/10">
+    <div className="mb-6 rounded-xl bg-card p-4 ring-1 ring-zy-line shadow-zy">
       <div className="flex flex-wrap gap-2">
         {buttons.map((button) => (
           <Button

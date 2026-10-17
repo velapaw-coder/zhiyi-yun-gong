@@ -24,7 +24,7 @@ export default async function MePage() {
           </>
         }
       />
-      <dl className="grid gap-4 rounded-xl bg-card p-4 text-sm ring-1 ring-foreground/10 sm:grid-cols-2">
+      <dl className="grid gap-4 rounded-xl bg-card p-4 text-sm ring-1 ring-zy-line shadow-zy sm:grid-cols-2">
         <div>
           <dt className="text-muted-foreground">编号</dt>
           <dd className="mt-1 font-mono">{talent.code}</dd>

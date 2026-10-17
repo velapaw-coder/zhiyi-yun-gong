@@ -62,8 +62,8 @@ export default async function TalentPage({ params }: { params: Promise<{ id: str
             }))}
           />
         ) : null}
-        <section className="rounded-xl bg-card p-4 text-sm ring-1 ring-foreground/10">
-          <h2 className="font-medium">登录账号</h2>
+        <section className="rounded-xl bg-card p-4 text-sm ring-1 ring-zy-line shadow-zy">
+          <h2 className="font-bold text-zy-deep">登录账号</h2>
           <p className="mt-2 text-muted-foreground">
             {talent.account ? `${talent.account.loginName}（${talent.account.status === "active" ? "启用" : "停用"}）` : "还没有执行端账号。到「账号」页绑定这位人才。"}
           </p>
