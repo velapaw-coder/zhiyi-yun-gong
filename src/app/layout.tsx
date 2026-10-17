@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -7,6 +7,13 @@ export const metadata: Metadata = {
     template: "%s · 智翼云工",
   },
   description: "AI 助残增长服务平台。签单、派活、交活、对账，四流留痕。",
+};
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  viewportFit: "cover",
+  themeColor: "#063345",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

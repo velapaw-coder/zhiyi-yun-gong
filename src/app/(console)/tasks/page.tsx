@@ -62,9 +62,9 @@ export default async function TasksPage({
         }
       />
       <form method="get" className="mb-4 flex flex-wrap items-end gap-2">
-        <Input name="q" defaultValue={q} placeholder="标题、编号或执行人" className="w-52" />
+        <Input name="q" defaultValue={q} placeholder="标题、编号或执行人" className="w-full sm:w-52" />
         {actor.role === "ops" ? (
-          <select name="enterpriseId" className={`${selectClass} w-44!`} defaultValue={enterpriseId}>
+          <select name="enterpriseId" className={`${selectClass} min-w-0 flex-1 basis-32 sm:flex-none sm:basis-auto sm:w-44!`} defaultValue={enterpriseId}>
             <option value="">全部企业</option>
             {enterprises.map((item) => (
               <option key={item.id} value={item.id}>
@@ -73,7 +73,7 @@ export default async function TasksPage({
             ))}
           </select>
         ) : null}
-        <select name="status" className={`${selectClass} w-32!`} defaultValue={status}>
+        <select name="status" className={`${selectClass} min-w-0 flex-1 basis-32 sm:flex-none sm:basis-auto sm:w-32!`} defaultValue={status}>
           <option value="">全部状态</option>
           {Object.entries(TASK_STATUS).map(([value, label]) => (
             <option key={value} value={value}>
@@ -100,11 +100,11 @@ export default async function TasksPage({
       ) : view === "board" ? (
         <div>
           {truncated ? <p className="mb-2 text-xs text-muted-foreground">看板最多显示 200 条，其余请用列表。</p> : null}
-          <div className="flex gap-3 overflow-x-auto pb-3">
+          <div className="-mx-4 flex snap-x snap-mandatory gap-3 overflow-x-auto px-4 pb-3 sm:mx-0 sm:px-0">
             {TASK_COLUMNS.map((column) => {
               const cards = rows.filter((row) => row.status === column);
               return (
-                <section key={column} className="w-72 shrink-0">
+                <section key={column} className="w-[80vw] max-w-72 shrink-0 snap-start sm:w-72">
                   <div className="mb-2 flex items-center justify-between px-1">
                     <h2 className="text-sm font-bold text-zy-deep">{TASK_STATUS[column]}</h2>
                     <span className="num text-xs text-muted-foreground">{cards.length}</span>

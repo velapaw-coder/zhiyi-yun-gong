@@ -35,7 +35,7 @@ export function RemoveFileButton({ ledgerId, fileId }: { ledgerId: string; fileI
     <span>
       <button
         type="button"
-        className="text-xs text-destructive hover:underline disabled:opacity-50"
+        className="-my-1.5 inline-flex min-h-8 items-center px-2 text-xs text-destructive hover:underline disabled:opacity-50"
         disabled={pending}
         onClick={() => {
           if (!window.confirm("附件会软删除，记录仍留在审计里。")) return;

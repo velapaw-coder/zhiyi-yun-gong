@@ -16,7 +16,7 @@ export default async function UsersPage() {
     expose(() => userFormOptions(actor)),
   ]);
   return (
-    <div className="grid gap-6 lg:grid-cols-[280px_1fr]">
+    <div className="grid gap-6 lg:grid-cols-[280px_1fr] [&>*]:min-w-0">
       <UserCreateForm enterprises={options.enterprises} talents={options.talents} />
       <div>
         <PageHeader eyebrow="权限" title="账号" description="运营可以重置密码和停用账号。企业侧本期不分财务和 HR。" />

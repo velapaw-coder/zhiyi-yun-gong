@@ -46,9 +46,9 @@ export default async function BillsPage({
         </div>
       ) : null}
       <form method="get" className="mb-4 flex flex-wrap items-end gap-2">
-        <Input name="yearMonth" type="month" defaultValue={yearMonth} className="w-40" />
+        <Input name="yearMonth" type="month" defaultValue={yearMonth} className="w-full sm:w-40" />
         {actor.role === "ops" ? (
-          <select name="enterpriseId" className={`${selectClass} w-48!`} defaultValue={enterpriseId}>
+          <select name="enterpriseId" className={`${selectClass} min-w-0 flex-1 basis-32 sm:flex-none sm:basis-auto sm:w-48!`} defaultValue={enterpriseId}>
             <option value="">全部企业</option>
             {filterEnterprises.map((item) => (
               <option key={item.id} value={item.id}>

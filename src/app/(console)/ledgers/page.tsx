@@ -46,10 +46,10 @@ export default async function LedgersPage({
       />
       {actor.role === "enterprise" ? <ReadOnlyBanner /> : null}
       <form method="get" className="mb-4 flex flex-wrap items-end gap-2">
-        <Input name="q" defaultValue={q} placeholder="人才姓名" className="w-40" />
-        <Input name="yearMonth" type="month" defaultValue={yearMonth || currentYearMonth()} className="w-40" />
+        <Input name="q" defaultValue={q} placeholder="人才姓名" className="w-full sm:w-40" />
+        <Input name="yearMonth" type="month" defaultValue={yearMonth || currentYearMonth()} className="w-full sm:w-40" />
         {actor.role === "ops" ? (
-          <select name="enterpriseId" className={`${selectClass} w-44!`} defaultValue={enterpriseId}>
+          <select name="enterpriseId" className={`${selectClass} min-w-0 flex-1 basis-32 sm:flex-none sm:basis-auto sm:w-44!`} defaultValue={enterpriseId}>
             <option value="">全部企业</option>
             {enterprises.map((item) => (
               <option key={item.id} value={item.id}>
@@ -58,7 +58,7 @@ export default async function LedgersPage({
             ))}
           </select>
         ) : null}
-        <select name="checkStatus" className={`${selectClass} w-32!`} defaultValue={checkStatus}>
+        <select name="checkStatus" className={`${selectClass} min-w-0 flex-1 basis-32 sm:flex-none sm:basis-auto sm:w-32!`} defaultValue={checkStatus}>
           <option value="">全部核对</option>
           {Object.entries(LEDGER_STATUS).map(([value, label]) => (
             <option key={value} value={value}>

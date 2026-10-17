@@ -37,8 +37,8 @@ export default async function TalentsPage({
         }
       />
       <form method="get" className="mb-4 flex flex-wrap items-end gap-2">
-        <Input name="q" defaultValue={q} placeholder="姓名、编号或电话" className="w-56" />
-        <select name="status" className={`${selectClass} w-36!`} defaultValue={status}>
+        <Input name="q" defaultValue={q} placeholder="姓名、编号或电话" className="w-full sm:w-56" />
+        <select name="status" className={`${selectClass} min-w-0 flex-1 basis-32 sm:flex-none sm:basis-auto sm:w-36!`} defaultValue={status}>
           <option value="">全部状态</option>
           {Object.entries(TALENT_STATUS).map(([value, label]) => (
             <option key={value} value={value}>

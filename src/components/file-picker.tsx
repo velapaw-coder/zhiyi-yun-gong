@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Input } from "@/components/ui/input";
+import { Paperclip } from "lucide-react";
 
 type Item = { id: string; name: string; error?: string };
 
@@ -31,19 +31,25 @@ export function FilePicker({ label = "附件" }: { label?: string }) {
 
   return (
     <div className="grid gap-2 text-sm">
-      <span className="font-medium">{label}</span>
-      <Input
-        type="file"
-        multiple
-        accept=".pdf,.doc,.docx,.xls,.xlsx,.png,.jpg,.jpeg,.zip"
-        disabled={uploading}
-        onChange={(event) => {
-          void onChange(event.target.files);
-          event.target.value = "";
-        }}
-      />
+      <span className="font-semibold text-zy-deep">{label}</span>
+      <label
+        className={`flex min-h-12 cursor-pointer items-center justify-center gap-2 rounded-lg border border-dashed border-[#9fc3d1] bg-zy-pale/40 px-3 text-sm font-semibold text-zy-blue transition hover:border-zy-cyan hover:bg-zy-pale ${uploading ? "pointer-events-none opacity-60" : ""}`}
+      >
+        <Paperclip className="size-4" />
+        {uploading ? "正在上传…" : items.some((item) => item.id) ? "继续添加文件" : "选择文件 / 拍照上传"}
+        <input
+          type="file"
+          multiple
+          className="sr-only"
+          accept=".pdf,.doc,.docx,.xls,.xlsx,.png,.jpg,.jpeg,.zip"
+          disabled={uploading}
+          onChange={(event) => {
+            void onChange(event.target.files);
+            event.target.value = "";
+          }}
+        />
+      </label>
       <p className="text-xs text-muted-foreground">支持 pdf / doc / docx / xls / xlsx / png / jpg / zip，单文件 ≤ 50MB，最多 20 个。</p>
-      {uploading ? <p className="text-xs text-muted-foreground">正在上传…</p> : null}
       <ul className="space-y-1">
         {items.map((item, index) => (
           <li key={`${item.name}-${index}`} className="text-xs">
@@ -52,7 +58,7 @@ export function FilePicker({ label = "附件" }: { label?: string }) {
                 {item.name}：{item.error}
               </span>
             ) : (
-              <span>{item.name}</span>
+              <span className="text-zy-green">✓ {item.name}</span>
             )}
           </li>
         ))}

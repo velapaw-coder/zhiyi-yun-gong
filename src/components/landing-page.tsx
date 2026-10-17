@@ -456,7 +456,7 @@ export function LandingPage() {
                 <strong className="text-zy-deep">适合沟通的议题：</strong>残障就业与岗位适配、AI 数字员工、工单交付、ESG 共创。
               </p>
               <p className="mt-4 text-sm text-zy-muted">运营主体：深圳市智翼云工科技有限公司</p>
-              <Link href={consoleHref} className="mt-6 inline-flex text-sm font-bold text-zy-blue hover:text-zy-cyan">
+              <Link href={consoleHref} className="mt-4 inline-flex py-2 text-sm font-bold text-zy-blue hover:text-zy-cyan">
                 已有账号？{consoleLabel} →
               </Link>
             </div>
@@ -476,7 +476,7 @@ export function LandingPage() {
                 <p className="text-[13px]">企业包容性劳动力与 AI 增长共创平台</p>
               </div>
             </div>
-            <nav className="flex flex-wrap gap-6 text-[13px]">
+            <nav className="flex flex-wrap gap-x-6 gap-y-1 text-[13px] [&>a]:py-2">
               {NAV.map((item) => (
                 <a key={item.href} href={item.href} className="hover:text-white">
                   {item.label}
@@ -493,7 +493,7 @@ export function LandingPage() {
         </div>
       </footer>
 
-      <a href="#contact" className="fixed right-5 bottom-5 z-20 inline-flex min-h-12 items-center rounded-lg bg-zy-gold px-5 text-sm font-bold text-[#172a34] shadow-[0_9px_28px_#033a4a44] transition hover:-translate-y-0.5">
+      <a href="#contact" className="fixed right-4 bottom-[max(1rem,env(safe-area-inset-bottom))] z-20 inline-flex min-h-12 items-center rounded-lg bg-zy-gold px-5 text-sm font-bold text-[#172a34] shadow-[0_9px_28px_#033a4a44] transition hover:-translate-y-0.5">
         合作咨询 ↗
       </a>
     </div>

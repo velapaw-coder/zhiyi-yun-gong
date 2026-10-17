@@ -165,9 +165,12 @@ export function TaskActions({
     return list;
   }, [ops, task.status]);
 
+  // 执行端在已验收/已取消的任务上没有可做的操作，不渲染空白卡片。
+  if (buttons.length === 0 && !error && !saved) return null;
+
   return (
     <div className="mb-6 rounded-xl bg-card p-4 ring-1 ring-zy-line shadow-zy">
-      <div className="flex flex-wrap gap-2">
+      <div className="flex flex-wrap gap-2 max-sm:[&>button]:h-11 max-sm:[&>button]:flex-1">
         {buttons.map((button) => (
           <Button
             key={button.key}
@@ -214,7 +217,7 @@ export function TaskActions({
             <Textarea name="links" rows={3} placeholder="https://" />
           </Field>
           <FilePicker />
-          <Button type="submit" disabled={pending}>
+          <Button type="submit" disabled={pending} className="max-sm:h-11">
             提交这一版
           </Button>
         </form>

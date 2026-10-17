@@ -52,7 +52,7 @@ export default function LoginPage() {
               <LoginForm />
             </Suspense>
           </div>
-          <Link href="/" className="mt-6 inline-flex text-sm font-semibold text-zy-blue hover:text-zy-cyan">
+          <Link href="/" className="mt-4 inline-flex py-2 text-sm font-semibold text-zy-blue hover:text-zy-cyan">
             ← 返回首页
           </Link>
         </div>

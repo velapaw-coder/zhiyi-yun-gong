@@ -43,9 +43,9 @@ export default async function PositionsPage({
       />
       {actor.role === "enterprise" ? <ReadOnlyBanner /> : null}
       <form method="get" className="mb-4 flex flex-wrap items-end gap-2">
-        <Input name="q" defaultValue={q} placeholder="搜索岗位" className="w-48" />
+        <Input name="q" defaultValue={q} placeholder="搜索岗位" className="w-full sm:w-48" />
         {actor.role === "ops" ? (
-          <select name="enterpriseId" className={`${selectClass} w-48!`} defaultValue={enterpriseId}>
+          <select name="enterpriseId" className={`${selectClass} min-w-0 flex-1 basis-32 sm:flex-none sm:basis-auto sm:w-48!`} defaultValue={enterpriseId}>
             <option value="">全部企业</option>
             {enterprises.map((item) => (
               <option key={item.id} value={item.id}>
@@ -54,7 +54,7 @@ export default async function PositionsPage({
             ))}
           </select>
         ) : null}
-        <select name="status" className={`${selectClass} w-32!`} defaultValue={status}>
+        <select name="status" className={`${selectClass} min-w-0 flex-1 basis-32 sm:flex-none sm:basis-auto sm:w-32!`} defaultValue={status}>
           <option value="">全部状态</option>
           {Object.entries(POSITION_STATUS).map(([value, label]) => (
             <option key={value} value={value}>

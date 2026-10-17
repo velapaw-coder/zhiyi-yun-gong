@@ -39,7 +39,7 @@ export default async function HomePage() {
             </Button>
           }
         />
-        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
+        <div className="grid grid-cols-2 gap-3 lg:grid-cols-5">
           {cards.map((card) => (
             <Link
               key={card.label}
@@ -96,7 +96,7 @@ export default async function HomePage() {
           title={data.enterprise?.name ?? "未绑定企业"}
           description="这里只显示本企业的岗位、任务、台账和已出账账单。不能改，也看不到其他企业。"
         />
-        <div className="grid gap-3 sm:grid-cols-3">
+        <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
           {data.counts.map((item) => (
             <Link key={item.status} href={`/tasks?status=${item.status}`} className="rounded-xl bg-card p-4 ring-1 ring-zy-line shadow-zy">
               <p className="text-xs text-muted-foreground">{TASK_STATUS[item.status] ?? item.status}</p>
@@ -128,7 +128,7 @@ export default async function HomePage() {
       <PageHeader eyebrow="执行端" title={`${actor.displayName}的待办`} description="只显示派给你的任务。领取、提交、按质检意见返工，都在任务详情里完成。" />
       <div className="mb-4 flex flex-wrap gap-2">
         {data.counts.map((item) => (
-          <Link key={item.status} href={`/tasks?status=${item.status}`} className="rounded-full bg-card px-3 py-1 text-sm ring-1 ring-zy-line shadow-zy">
+          <Link key={item.status} href={`/tasks?status=${item.status}`} className="inline-flex min-h-9 items-center rounded-full bg-card px-3.5 text-sm ring-1 ring-zy-line shadow-zy">
             {TASK_STATUS[item.status] ?? item.status} {item._count._all}
           </Link>
         ))}

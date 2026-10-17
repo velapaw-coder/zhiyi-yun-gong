@@ -76,7 +76,7 @@ export default async function TaskDetailPage({ params }: { params: Promise<{ id:
         />
       ) : null}
       <details className="mb-6 rounded-xl bg-card p-4 ring-1 ring-zy-line shadow-zy" open>
-        <summary className="cursor-pointer font-medium">任务要求、交付标准、质检规则</summary>
+        <summary className="cursor-pointer py-2 font-medium">任务要求、交付标准、质检规则</summary>
         <div className="mt-3 grid gap-4 text-sm leading-6 md:grid-cols-3">
           <div>
             <p className="text-xs text-muted-foreground">任务要求</p>
@@ -143,7 +143,7 @@ export default async function TaskDetailPage({ params }: { params: Promise<{ id:
             <Tabs defaultValue={String(current?.versionNo ?? 1)} className="rounded-xl bg-card p-4 ring-1 ring-zy-line shadow-zy">
               <TabsList className="flex h-auto flex-wrap">
                 {task.deliveries.map((delivery) => (
-                  <TabsTrigger key={delivery.id} value={String(delivery.versionNo)}>
+                  <TabsTrigger key={delivery.id} value={String(delivery.versionNo)} className="min-h-9 px-3 sm:min-h-0">
                     v{delivery.versionNo}
                     {delivery.id === task.currentDeliveryId ? " 当前" : ""}
                   </TabsTrigger>

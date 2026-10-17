@@ -5,7 +5,7 @@ import { useState } from "react";
 const PLANS = ["希望先了解整体方案", "套餐 A · 合规版", "套餐 B · 增长版", "套餐 C · ESG 版"];
 
 const inputClass =
-  "w-full rounded-lg border border-[#cbd8de] bg-white px-3 py-2.5 text-sm text-zy-text outline-none transition placeholder:text-[#8a9aa3] focus:border-zy-cyan focus:ring-3 focus:ring-zy-cyan/20";
+  "w-full rounded-lg border border-[#cbd8de] bg-white px-3 py-2.5 text-base text-zy-text sm:text-sm outline-none transition placeholder:text-[#8a9aa3] focus:border-zy-cyan focus:ring-3 focus:ring-zy-cyan/20";
 
 export function LeadForm() {
   const [message, setMessage] = useState<string | null>(null);

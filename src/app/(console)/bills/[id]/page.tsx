@@ -32,7 +32,7 @@ export default async function BillPage({ params }: { params: Promise<{ id: strin
         }
       />
       {ops ? null : <ReadOnlyBanner />}
-      <div className="mb-4 grid gap-3 sm:grid-cols-4">
+      <div className="mb-4 grid grid-cols-2 gap-3 sm:grid-cols-4">
         {[
           ["岗位费", bill.positionFeeTotal],
           ["平台服务费", bill.platformServiceFee],
