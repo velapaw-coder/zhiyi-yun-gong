@@ -126,9 +126,10 @@ function Section({
   );
 }
 
-export function LandingPage({ signedIn }: { signedIn: boolean }) {
-  const consoleHref = signedIn ? "/workbench" : "/login";
-  const consoleLabel = signedIn ? "进入控制台" : "登录控制台";
+export function LandingPage() {
+  // 页面是静态的；已登录用户访问 /login 会被 proxy 转到 /workbench。
+  const consoleHref = "/login";
+  const consoleLabel = "登录 / 进入控制台";
 
   return (
     <div className="min-h-screen bg-zy-paper text-zy-text">
@@ -487,7 +488,7 @@ export function LandingPage({ signedIn }: { signedIn: boolean }) {
             </nav>
           </div>
           <div className="mt-9 border-t border-[#285061] pt-5 text-xs">
-            © {new Date().getFullYear()} 深圳市智翼云工科技有限公司 · 网站展示版（备案、隐私政策和正式联系方式上线前补充）
+            © 2026 深圳市智翼云工科技有限公司 · 网站展示版（备案、隐私政策和正式联系方式上线前补充）
           </div>
         </div>
       </footer>

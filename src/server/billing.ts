@@ -168,6 +168,8 @@ export async function buildBillDraft(actor: Actor, enterpriseId: string, yearMon
     invoiceNo: null,
     paymentStatus: "unpaid",
     paidAmount: 0,
+    // 作废后重新生成的是一张新草稿，旧的作废原因只留在审计里，不再显示在账单上。
+    ...(existing?.status === "voided" ? { remark: null } : {}),
   };
 
   const code = existing?.code ?? (await nextBillCode());
@@ -195,7 +197,10 @@ export async function buildBillDraft(actor: Actor, enterpriseId: string, yearMon
     return saved;
   });
 
-  await writeAudit(actor, "bill", bill.id, existing ? "generate" : "generate", null, `生成 ${enterprise.name} ${yearMonth} 草稿账单`);
+  const regenerated = existing
+    ? `重新生成 ${enterprise.name} ${yearMonth} 草稿账单${existing.status === "voided" && existing.remark ? `（此前${existing.remark.replace(/\n/g, "；")}）` : ""}`
+    : `生成 ${enterprise.name} ${yearMonth} 草稿账单`;
+  await writeAudit(actor, "bill", bill.id, "generate", null, regenerated);
   return bill;
 }
 
