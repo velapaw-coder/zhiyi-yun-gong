@@ -98,7 +98,7 @@ export function LevyReport({ result, compact = false }: { result: LevyResult; co
               <li key={s.key} className={`bg-white px-4 py-3 ${s.key === rec.key ? "bg-zy-pale/60" : ""}`} data-scenario-card={s.key}>
                 <p className="font-semibold text-zy-deep">
                   {s.label}
-                  {s.key === rec.key ? <span className="ml-2 rounded-full bg-zy-gold px-2 py-0.5 text-[11px] font-bold text-zy-deep">推荐</span> : null}
+                  {s.key === rec.key ? <span className="ml-2 inline-block rounded-full bg-zy-gold px-2 py-0.5 align-middle text-[11px] leading-4 font-bold whitespace-nowrap text-zy-deep">推荐</span> : null}
                 </p>
                 <dl className="mt-2 grid grid-cols-2 gap-x-4 gap-y-1 text-sm">
                   <dt className="text-zy-muted">新增 / 比例</dt>
@@ -131,7 +131,7 @@ export function LevyReport({ result, compact = false }: { result: LevyResult; co
                   <tr key={s.key} className={`border-t border-zy-line ${s.key === rec.key ? "bg-zy-pale/60" : ""}`} data-scenario={s.key}>
                     <td className="px-3 py-2.5 pl-4 font-semibold text-zy-deep md:pl-5">
                       {s.label}
-                      {s.key === rec.key ? <span className="ml-2 rounded-full bg-zy-gold px-2 py-0.5 text-[11px] font-bold text-zy-deep">推荐</span> : null}
+                      {s.key === rec.key ? <span className="ml-2 inline-block rounded-full bg-zy-gold px-2 py-0.5 align-middle text-[11px] leading-4 font-bold whitespace-nowrap text-zy-deep">推荐</span> : null}
                     </td>
                     <td className="num px-3 py-2.5">{s.newPersons} 人</td>
                     <td className="num px-3 py-2.5">{percentBp(s.state.placedRatioBp)}</td>
