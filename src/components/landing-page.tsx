@@ -1,9 +1,11 @@
 import Link from "next/link";
 import { BrandMark, WingGlyph } from "@/components/brand";
 import { LeadForm } from "@/components/lead-form";
+import { LevyCalculator } from "@/components/levy/calculator";
 
 const NAV = [
   { href: "#why", label: "企业价值" },
+  { href: "#calculator", label: "残保金测算" },
   { href: "#how", label: "解决方案" },
   { href: "#services", label: "产品服务" },
   { href: "#evidence", label: "合规体系" },
@@ -211,8 +213,8 @@ export function LandingPage() {
                 <a href="#contact" className="inline-flex min-h-12 items-center rounded-lg bg-zy-gold px-6 text-sm font-bold text-[#172a34] transition hover:-translate-y-0.5 hover:brightness-105">
                   获取企业专属方案 ↗
                 </a>
-                <a href="#how" className="inline-flex min-h-12 items-center rounded-lg border border-[#82b5c6] px-6 text-sm font-bold text-white transition hover:-translate-y-0.5 hover:bg-white/5">
-                  了解解决方案 ↓
+                <a href="#calculator" className="inline-flex min-h-12 items-center rounded-lg border border-[#82b5c6] px-6 text-sm font-bold text-white transition hover:-translate-y-0.5 hover:bg-white/5">
+                  免费测算残保金 ↓
                 </a>
                 <Link href={consoleHref} className="inline-flex min-h-12 items-center rounded-lg px-4 text-sm font-semibold text-[#9fe0ef] hover:text-white">
                   {consoleLabel} →
@@ -286,6 +288,11 @@ export function LandingPage() {
         </Section>
 
         {/* 02 */}
+        {/* 残保金计算器 */}
+        <Section id="calculator" tone="white" kicker="残保金测算 · 2026 现行政策" title={<>先算清楚：今年要缴多少，<br className="hidden md:block" />安置几人最划算</>} lede="浏览器本地计算，不上传数据。含分档减缴、30 人以下免征、2 倍社平封顶、重度 1 人按 2 人计。">
+          <LevyCalculator compact />
+        </Section>
+
         <Section id="how" tone="white" kicker="02 / 一底座 · 一飞轮 · 一阶梯" title="从合规用工到 AI 增长交付" lede="以五流合一为基础，连接岗位、技能、任务与验收，构建可以持续运营的工作体系。">
           <div className="grid gap-4 md:grid-cols-3">
             {STRUCTURE.map(([kicker, title, text], index) => (

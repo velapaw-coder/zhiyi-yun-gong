@@ -62,7 +62,7 @@ export default async function AuditPage({
           <input type="hidden" name="kind" value="audit" />
           <select name="entityType" defaultValue={type} className="h-8 rounded-lg border border-input bg-card px-2 text-sm">
             <option value="">全部对象</option>
-            {["enterprise", "plan", "position", "talent", "task", "ledger", "bill", "user"].map((item) => (
+            {["enterprise", "plan", "proposal", "position", "talent", "task", "ledger", "bill", "user", "setting"].map((item) => (
               <option key={item} value={item}>
                 {item}
               </option>

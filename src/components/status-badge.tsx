@@ -16,6 +16,8 @@ const TONE = {
 const tones: Record<string, string> = {
   potential: TONE.neutral,
   draft: TONE.neutral,
+  sent: TONE.info,
+  converted: TONE.ok,
   candidate: TONE.neutral,
   not_started: TONE.neutral,
   incomplete: TONE.neutral,

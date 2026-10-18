@@ -52,9 +52,11 @@ export function EnterpriseForm({
   mode,
   id,
   defaults,
+  fromProposal,
 }: {
   mode: "create" | "edit";
   id?: string;
+  fromProposal?: string;
   defaults?: {
     code?: string;
     name: string;
@@ -78,11 +80,14 @@ export function EnterpriseForm({
         void submit(
           () => (mode === "create" ? createEnterpriseAction(form) : updateEnterpriseAction(id!, form)),
           (data) => {
-            if (mode === "create" && data?.id) router.push(`/enterprises/${data.id}`);
+            if (mode === "create" && data?.id) {
+              router.push(fromProposal ? `/enterprises/${data.id}/plans/new?fromProposal=${fromProposal}` : `/enterprises/${data.id}`);
+            }
           },
         );
       }}
     >
+      {fromProposal ? <input type="hidden" name="fromProposal" value={fromProposal} /> : null}
       <FormError message={error} />
       <FormNote message={saved && mode === "edit" ? "已保存" : null} />
       {mode === "create" ? (
@@ -164,10 +169,12 @@ export function PlanForm({
   id,
   enterpriseId,
   defaults,
+  fromProposal,
 }: {
   mode: "create" | "edit";
   id?: string;
   enterpriseId: string;
+  fromProposal?: { id: string; code: string };
   defaults?: {
     code?: string;
     planVersion: string;
@@ -197,10 +204,13 @@ export function PlanForm({
       }}
     >
       <input type="hidden" name="enterpriseId" value={enterpriseId} />
+      {fromProposal ? <input type="hidden" name="fromProposal" value={fromProposal.id} /> : null}
       <FormError message={error} />
       <FormNote message={saved && mode === "edit" ? "已保存" : null} />
       <div className="md:col-span-2 rounded-lg bg-muted px-3 py-2 text-xs leading-5 text-muted-foreground">
-        产品线固定为「合规交付 + 单岗位」。成本优化测算本期不自动出报告，请把手工测算说明写在备注，或在下方上传测算表（Q8）。
+        {fromProposal
+          ? `已按残保金方案书 ${fromProposal.code} 预填：基数为减缴前应缴，缺口为当前实际应缴，月服务费 = 服务费 × 建议新增人数。保存后方案书标记为「已转签单」。`
+          : "产品线固定为「合规交付 + 单岗位」。成本测算可先在「方案书」里自动生成，再转为签单方案；也可以把手工测算说明写在备注。"}
       </div>
       {mode === "create" ? (
         <Field label="编号" hint="留空自动生成">

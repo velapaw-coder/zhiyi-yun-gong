@@ -33,6 +33,7 @@ model User {
   uploadedFiles    FileAsset[]
   checkedLedgers   ComplianceLedger[]  @relation("LedgerChecker")
   createdBills     Bill[]
+  proposals        Proposal[]          @relation("ProposalCreator")
 }
 
 model Enterprise {
@@ -57,6 +58,7 @@ model Enterprise {
   ledgers   ComplianceLedger[]
   bills     Bill[]
   files     FileAsset[]
+  proposals Proposal[]
 }
 
 model Plan {
@@ -328,4 +330,34 @@ model SecurityLog {
   path        String?
   detail      String?
   createdAt   DateTime @default(now())
+}
+
+/// 残保金方案书：运营为企业（或潜在客户）做的测算快照。inputs / result 存 JSON，金额单位为分。
+model Proposal {
+  id            String      @id @default(cuid())
+  code          String      @unique
+  enterpriseId  String?
+  enterprise    Enterprise? @relation(fields: [enterpriseId], references: [id])
+  companyName   String
+  region        String
+  inputs        String
+  result        String
+  serviceFee    Int
+  /// draft 草稿 / sent 已发送 / converted 已转签单方案
+  status        String      @default("draft")
+  planId        String?
+  remark        String?
+  createdById   String
+  createdBy     User        @relation("ProposalCreator", fields: [createdById], references: [id])
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+
+  @@index([enterpriseId, createdAt])
+}
+
+/// 运营可改的简单配置，例如计算器服务费默认值。
+model AppSetting {
+  key       String   @id
+  value     String
+  updatedAt DateTime @updatedAt
 }

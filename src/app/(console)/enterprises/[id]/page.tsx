@@ -28,6 +28,9 @@ export default async function EnterpriseDetailPage({ params }: { params: Promise
               <Button variant="outline" asChild>
                 <Link href={`/enterprises/${enterprise.id}/edit`}>编辑企业</Link>
               </Button>
+              <Button variant="outline" asChild>
+                <Link href={`/proposals/new?enterpriseId=${enterprise.id}`}>残保金方案书</Link>
+              </Button>
               <Button asChild>
                 <Link href={`/enterprises/${enterprise.id}/plans/new`}>新建方案</Link>
               </Button>

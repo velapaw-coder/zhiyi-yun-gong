@@ -16,7 +16,7 @@ async function roleOf(token: string | undefined) {
 export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
   const role = await roleOf(request.cookies.get(COOKIE)?.value);
-  if (pathname === "/api/login") return NextResponse.next();
+  if (pathname === "/api/login" || pathname === "/api/calc-config" || pathname === "/calculator") return NextResponse.next();
 
   if (!role) {
     if (pathname === "/" || pathname === "/home" || pathname === "/login") return NextResponse.next();
@@ -45,7 +45,7 @@ export async function proxy(request: NextRequest) {
   }
 
   if (role === "worker") {
-    const blocked = ["/enterprises", "/positions", "/ledgers", "/bills", "/plans"];
+    const blocked = ["/enterprises", "/positions", "/ledgers", "/bills", "/plans", "/proposals"];
     if (blocked.some((path) => pathname === path || pathname.startsWith(`${path}/`))) {
       const url = request.nextUrl.clone();
       url.pathname = "/workbench";
@@ -54,7 +54,7 @@ export async function proxy(request: NextRequest) {
     }
   }
 
-  if (role === "enterprise" && (pathname === "/enterprises" || pathname === "/enterprises/new")) {
+  if (role === "enterprise" && (pathname === "/enterprises" || pathname === "/enterprises/new" || pathname === "/proposals/new")) {
     const url = request.nextUrl.clone();
     url.pathname = "/workbench";
     url.search = "";

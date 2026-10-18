@@ -7,6 +7,7 @@ import {
   Building2,
   ClipboardList,
   FileSpreadsheet,
+  FileText,
   Home,
   Layers,
   ListChecks,
@@ -31,6 +32,7 @@ function itemsFor(actor: Actor): Array<{ href: string; label: string; icon: Luci
     return [
       { href: "/workbench", label: "工作台", icon: Home },
       { href: "/enterprises", label: "企业", icon: Building2 },
+      { href: "/proposals", label: "方案书", icon: FileText },
       { href: "/positions", label: "岗位", icon: Layers },
       { href: "/tasks", label: "任务", icon: ListChecks },
       { href: "/talents", label: "人才", icon: UsersRound },
@@ -48,6 +50,7 @@ function itemsFor(actor: Actor): Array<{ href: string; label: string; icon: Luci
       { href: "/tasks", label: "任务", icon: ListChecks },
       { href: "/ledgers", label: "台账", icon: FileSpreadsheet },
       { href: "/bills", label: "账单", icon: Receipt },
+      { href: "/proposals", label: "方案书", icon: FileText },
     ];
   }
   return [
@@ -72,7 +75,7 @@ function useTableCardLabels(pathname: string) {
     const label = () => {
       root.querySelectorAll("table").forEach((table) => {
         const heads = Array.from(table.querySelectorAll("thead th")).map((th) => th.textContent?.trim() ?? "");
-        if (heads.length === 0) return;
+        if (heads.length === 0 || table.hasAttribute("data-levy-table")) return;
         table.setAttribute("data-cards", "");
         table.querySelectorAll("tbody tr").forEach((row) => {
           Array.from(row.children).forEach((cell, index) => {

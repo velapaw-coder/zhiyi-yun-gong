@@ -18,7 +18,8 @@
     "cf:typegen": "wrangler types --env-interface CloudflareEnv cloudflare-env.d.ts",
     "cf:schema": "node scripts/ensure-env.mjs && prisma migrate diff --from-empty --to-schema-datamodel prisma/schema.prisma --script --output prisma/d1/migrations/0001_init.sql",
     "cf:seed-sql": "node scripts/export-d1-seed.mjs",
-    "cf:push-uploads": "node scripts/push-uploads-r2.mjs"
+    "cf:push-uploads": "node scripts/push-uploads-r2.mjs",
+    "test": "tsx --test tests/*.test.ts"
   },
   "prisma": {
     "seed": "tsx prisma/seed.ts"

@@ -17,6 +17,16 @@ import {
   submitTask,
 } from "../src/server/tasks";
 import type { Actor } from "../src/server/types";
+import {
+  createProposal,
+  getProposal,
+  getServiceFeeFen,
+  linkProposalEnterprise,
+  listProposals,
+  markProposalConverted,
+  planDefaultsFromProposal,
+  setServiceFee,
+} from "../src/server/proposals";
 
 function assert(condition: unknown, message: string): asserts condition {
   if (!condition) throw new Error(message);
@@ -34,6 +44,8 @@ async function expectError(work: () => Promise<unknown>, code: AppError["code"],
 }
 
 async function wipe() {
+  await prisma.proposal.deleteMany();
+  await prisma.appSetting.deleteMany();
   await prisma.taskAuditLog.deleteMany();
   await prisma.fileAsset.deleteMany();
   await prisma.deliveryVersion.deleteMany();
@@ -284,6 +296,51 @@ async function main() {
     "BAD_REQUEST",
     "同月台账唯一",
   );
+
+  // 残保金方案书：服务端重算、权限隔离、转签单
+  assert((await getServiceFeeFen()) === 50_000, "默认服务费 500 元");
+  await expectError(() => setServiceFee(entA, "400"), "FORBIDDEN", "企业不能改服务费");
+  await setServiceFee(ops, "520");
+  assert((await getServiceFeeFen()) === 52_000, "服务费改为 520 元");
+  const form = {
+    enterpriseId: "ent_a",
+    region: "national",
+    ratio: "1.5",
+    employees: "300",
+    avgWage: "96000",
+    socialAvgWage: "120000",
+    minWage: "2520",
+    monthlyWage: "2520",
+    monthlySocial: "1100",
+    placedMild: "0",
+    placedSevere: "0",
+    newKind: "severe",
+    serviceFee: "500",
+    isEnterprise: "on",
+    remark: "verify",
+  };
+  const proposal = await createProposal(ops, form);
+  await expectError(() => createProposal(entA, form), "FORBIDDEN", "企业不能建方案书");
+  await expectError(() => createProposal(ops, { ...form, ratio: "1.2" }), "BAD_REQUEST", "比例不得低于 1.5%");
+  const own = await getProposal(entA, proposal.id);
+  assert(own.parsed.current.levyFen === 38_880_000, `应缴 388800 元，实际 ${own.parsed.current.levyFen}`);
+  assert(own.parsed.recommended.newPersons === 2, "推荐新增 2 人（到 1%）");
+  await expectError(() => getProposal(entB, proposal.id), "FORBIDDEN", "别家企业看不到方案书");
+  await expectError(() => getProposal(worker, proposal.id), "FORBIDDEN", "执行端看不到方案书");
+  await expectError(() => listProposals(worker, { pageSize: 20, skip: 0 }), "FORBIDDEN", "执行端没有方案书列表");
+  assert((await listProposals(entA, { skip: 0, pageSize: 20 })).total === 1, "企业 A 看到 1 份");
+  assert((await listProposals(entB, { skip: 0, pageSize: 20 })).total === 0, "企业 B 看到 0 份");
+  const prospect = await createProposal(ops, { ...form, enterpriseId: "", companyName: "潜在客户 C" });
+  assert(prospect.enterpriseId === null, "潜在客户没有企业档案");
+  await expectError(() => getProposal(entA, prospect.id), "FORBIDDEN", "企业看不到未关联的方案书");
+  await linkProposalEnterprise(ops, prospect.id, "ent_b");
+  assert((await listProposals(entB, { skip: 0, pageSize: 20 })).total === 1, "关联后企业 B 能看到");
+  const defaults = planDefaultsFromProposal(own, new Date("2026-10-18T00:00:00Z"));
+  assert(defaults.monthlyServiceFee === "1000.00", `月服务费 500×2，实际 ${defaults.monthlyServiceFee}`);
+  assert(defaults.disabilityFundGap === "388800.00", "缺口=当前应缴");
+  assert(defaults.startDate === "2026-11-01" && defaults.endDate === "2027-10-31", `服务期 ${defaults.startDate}~${defaults.endDate}`);
+  await markProposalConverted(ops, proposal.id, "plan_x");
+  assert((await getProposal(ops, proposal.id)).status === "converted", "转签单后状态为已转签单");
 
   console.log("verify ok");
 }

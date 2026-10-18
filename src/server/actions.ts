@@ -7,6 +7,7 @@ import { requireActor } from "@/server/session";
 import * as repo from "@/server/repo";
 import * as tasks from "@/server/tasks";
 import * as billing from "@/server/billing";
+import * as proposals from "@/server/proposals";
 
 export type ActionResult<T = undefined> =
   | { ok: true; data?: T; warning?: string }
@@ -56,6 +57,11 @@ export async function createEnterpriseAction(form: FormData): Promise<ActionResu
       status: str(form, "status"),
       remark: str(form, "remark"),
     });
+    const fromProposal = str(form, "fromProposal");
+    if (fromProposal) {
+      await proposals.linkProposalEnterprise(actor, fromProposal, row.id);
+      refresh("/proposals", `/proposals/${fromProposal}`);
+    }
     refresh("/enterprises");
     return { id: row.id };
   });
@@ -101,6 +107,11 @@ export async function createPlanAction(form: FormData): Promise<ActionResult<{ i
       signStatus: str(form, "signStatus"),
       remark: str(form, "remark"),
     });
+    const fromProposal = str(form, "fromProposal");
+    if (fromProposal) {
+      await proposals.markProposalConverted(actor, fromProposal, row.id);
+      refresh("/proposals", `/proposals/${fromProposal}`);
+    }
     refresh("/enterprises", `/enterprises/${row.enterpriseId}`, `/plans/${row.id}`);
     return { id: row.id };
   });
@@ -499,5 +510,46 @@ export async function setUserStatusAction(userId: string, status: "active" | "di
   return wrap(async () => {
     await repo.setUserStatus(actor, userId, status);
     refresh("/users");
+  });
+}
+
+function formRecord(form: FormData) {
+  const out: Record<string, string> = {};
+  form.forEach((value, key) => {
+    if (typeof value === "string") out[key] = value;
+  });
+  return out;
+}
+
+export async function createProposalAction(form: FormData): Promise<ActionResult<{ id: string }>> {
+  const actor = await requireActor();
+  return wrap(async () => {
+    const row = await proposals.createProposal(actor, formRecord(form));
+    refresh("/proposals");
+    return { id: row.id };
+  });
+}
+
+export async function setProposalStatusAction(id: string, status: string): Promise<ActionResult> {
+  const actor = await requireActor();
+  return wrap(async () => {
+    await proposals.setProposalStatus(actor, id, status);
+    refresh("/proposals", `/proposals/${id}`);
+  });
+}
+
+export async function deleteProposalAction(id: string): Promise<ActionResult> {
+  const actor = await requireActor();
+  return wrap(async () => {
+    await proposals.deleteProposal(actor, id);
+    refresh("/proposals");
+  });
+}
+
+export async function setServiceFeeAction(form: FormData): Promise<ActionResult> {
+  const actor = await requireActor();
+  return wrap(async () => {
+    await proposals.setServiceFee(actor, str(form, "serviceFee"));
+    refresh("/proposals", "/proposals/new");
   });
 }
