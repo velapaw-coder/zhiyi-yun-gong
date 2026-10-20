@@ -33,7 +33,7 @@ const PUBLIC_FILES = new Set(["/robots.txt", "/sitemap.xml", "/manifest.webmanif
 
 async function handle(request: NextRequest, pathname: string) {
   const role = await roleOf(request.cookies.get(COOKIE)?.value);
-  if (pathname === "/api/login" || pathname === "/api/calc-config" || pathname === "/calculator") return NextResponse.next();
+  if (pathname === "/api/login" || pathname === "/api/calc-config" || pathname === "/api/leads" || pathname === "/calculator") return NextResponse.next();
 
   if (!role) {
     if (pathname === "/" || pathname === "/home" || pathname === "/login") return NextResponse.next();
@@ -53,7 +53,7 @@ async function handle(request: NextRequest, pathname: string) {
     return NextResponse.redirect(url);
   }
 
-  const opsOnly = ["/users", "/audit", "/talents"];
+  const opsOnly = ["/users", "/audit", "/talents", "/leads"];
   if (role !== "ops" && opsOnly.some((path) => pathname === path || pathname.startsWith(`${path}/`))) {
     const url = request.nextUrl.clone();
     url.pathname = "/workbench";

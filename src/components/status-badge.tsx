@@ -14,6 +14,10 @@ const TONE = {
 } as const;
 
 const tones: Record<string, string> = {
+  new: TONE.warn,
+  contacted: TONE.info,
+  proposed: TONE.teal,
+  invalid: TONE.muted,
   potential: TONE.neutral,
   draft: TONE.neutral,
   sent: TONE.info,

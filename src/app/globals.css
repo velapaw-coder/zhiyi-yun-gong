@@ -356,3 +356,16 @@ input[type="checkbox"] {
     display: none !important;
   }
 }
+
+/* 官网留资后的测算报告：屏幕上隐藏，打印时只留它 */
+#zy-lead-print {
+  display: none;
+}
+@media print {
+  body.zy-print-lead > *:not(#zy-lead-print) {
+    display: none !important;
+  }
+  body.zy-print-lead #zy-lead-print {
+    display: block !important;
+  }
+}

@@ -9,6 +9,7 @@ import {
   FileSpreadsheet,
   FileText,
   Home,
+  Inbox,
   Layers,
   ListChecks,
   LogOut,
@@ -32,6 +33,7 @@ function itemsFor(actor: Actor): Array<{ href: string; label: string; icon: Luci
     return [
       { href: "/workbench", label: "工作台", icon: Home },
       { href: "/enterprises", label: "企业", icon: Building2 },
+      { href: "/leads", label: "线索", icon: Inbox },
       { href: "/proposals", label: "方案书", icon: FileText },
       { href: "/positions", label: "岗位", icon: Layers },
       { href: "/tasks", label: "任务", icon: ListChecks },
@@ -62,7 +64,7 @@ function itemsFor(actor: Actor): Array<{ href: string; label: string; icon: Luci
 
 /** 手机底部导航：每个角色最常用的几项，其余放进「更多」抽屉。 */
 const MOBILE_PRIMARY: Record<string, string[]> = {
-  ops: ["/workbench", "/tasks", "/enterprises", "/ledgers"],
+  ops: ["/workbench", "/leads", "/tasks", "/enterprises"],
   enterprise: ["/workbench", "/tasks", "/ledgers", "/bills"],
   worker: ["/workbench", "/tasks", "/me"],
 };
@@ -100,10 +102,12 @@ function active(pathname: string, href: string) {
 export function Shell({
   actor,
   today,
+  newLeads = 0,
   children,
 }: {
   actor: Actor;
   today: string;
+  newLeads?: number;
   children: React.ReactNode;
 }) {
   const pathname = usePathname();
@@ -165,6 +169,7 @@ export function Shell({
               >
                 <Icon className={cn("size-4", on ? "text-zy-gold" : "text-[#9fe0ef]/70")} />
                 {item.label}
+                {item.href === "/leads" && newLeads > 0 ? <span data-testid="lead-badge" className="ml-auto min-w-5 rounded-full bg-zy-gold px-1.5 text-center text-[11px] leading-5 font-bold text-zy-deep">{newLeads > 99 ? "99+" : newLeads}</span> : null}
               </Link>
             );
           })}
@@ -240,8 +245,9 @@ export function Shell({
                     on ? "text-zy-blue" : "text-zy-muted",
                   )}
                 >
-                  <span className={cn("grid h-7 w-12 place-items-center rounded-full", on && "bg-zy-pale")}>
+                  <span className={cn("relative grid h-7 w-12 place-items-center rounded-full", on && "bg-zy-pale")}>
                     <Icon className="size-5" />
+                    {item.href === "/leads" && newLeads > 0 ? <span className="absolute -top-1 right-1 min-w-4 rounded-full bg-zy-rose px-1 text-[10px] leading-4 font-bold text-white">{newLeads > 99 ? "99+" : newLeads}</span> : null}
                   </span>
                   {item.label}
                 </Link>

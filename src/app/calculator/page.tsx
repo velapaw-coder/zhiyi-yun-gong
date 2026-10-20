@@ -111,7 +111,7 @@ export default function CalculatorPage() {
               <span className="zy-kicker">定制方案书</span>
               <h2 className="mt-3 text-2xl font-bold text-zy-deep md:text-3xl">把测算变成可执行的方案</h2>
               <p className="mt-3 leading-7 text-zy-muted">
-                我们会按企业所在地的比例、社平工资和最低工资复核测算，给出安置人数、岗位与五流合规档案的方案书。可以先点「复制测算结果」，粘贴到右侧表单的「主要需求」里。
+                我们会按企业所在地的比例、社平工资和最低工资复核测算，给出安置人数、岗位与五流合规档案的方案书。提交右侧表单时会一并带上您刚才的测算参数和结果，顾问据此出具定制方案书。
               </p>
             </div>
             <LeadForm />

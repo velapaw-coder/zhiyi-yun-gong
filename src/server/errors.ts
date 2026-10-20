@@ -1,7 +1,7 @@
 export class AppError extends Error {
   constructor(
     message: string,
-    readonly code: "BAD_REQUEST" | "FORBIDDEN" | "NOT_FOUND" = "BAD_REQUEST",
+    readonly code: "BAD_REQUEST" | "FORBIDDEN" | "NOT_FOUND" | "RATE_LIMIT" = "BAD_REQUEST",
   ) {
     super(message);
   }

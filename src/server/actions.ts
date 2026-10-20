@@ -8,6 +8,7 @@ import * as repo from "@/server/repo";
 import * as tasks from "@/server/tasks";
 import * as billing from "@/server/billing";
 import * as proposals from "@/server/proposals";
+import * as leads from "@/server/leads";
 
 export type ActionResult<T = undefined> =
   | { ok: true; data?: T; warning?: string }
@@ -551,5 +552,22 @@ export async function setServiceFeeAction(form: FormData): Promise<ActionResult>
   return wrap(async () => {
     await proposals.setServiceFee(actor, str(form, "serviceFee"));
     refresh("/proposals", "/proposals/new");
+  });
+}
+
+export async function updateLeadAction(id: string, form: FormData): Promise<ActionResult> {
+  const actor = await requireActor();
+  return wrap(async () => {
+    await leads.updateLead(actor, id, str(form, "status"), str(form, "ownerNote"));
+    refresh("/leads", `/leads/${id}`);
+  });
+}
+
+export async function proposalFromLeadAction(id: string): Promise<ActionResult<{ id: string }>> {
+  const actor = await requireActor();
+  return wrap(async () => {
+    const row = await leads.proposalFromLead(actor, id);
+    refresh("/leads", `/leads/${id}`, "/proposals");
+    return { id: row.id };
   });
 }

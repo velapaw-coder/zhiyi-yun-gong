@@ -5,6 +5,7 @@ import Link from "next/link";
 import { calculateLevy, summaryText } from "@/lib/levy";
 import { DEFAULT_DRAFT, LevyFields, draftToInput, regionName, type LevyDraft } from "@/components/levy/fields";
 import { LevyReport } from "@/components/levy/report";
+import { markCalcTouched, setCalcDraft } from "@/components/levy/calc-store";
 
 /**
  * 公开的残保金计算器。全部在浏览器里算，页面本身是静态的；
@@ -15,6 +16,15 @@ export function LevyCalculator({ compact = false }: { compact?: boolean }) {
   const [copied, setCopied] = useState<string | null>(null);
   const [fallback, setFallback] = useState<string | null>(null);
   const result = useMemo(() => calculateLevy(draftToInput(draft)), [draft]);
+
+  const [touched, setTouched] = useState(false);
+  useEffect(() => {
+    setCalcDraft(draft, touched);
+  }, [draft, touched]);
+  const edit = (next: LevyDraft) => {
+    setTouched(true);
+    setDraft(next);
+  };
 
   useEffect(() => {
     let alive = true;
@@ -51,7 +61,7 @@ export function LevyCalculator({ compact = false }: { compact?: boolean }) {
             恢复示例
           </button>
         </h3>
-        <LevyFields draft={draft} onChange={setDraft} feeEditable={false} />
+        <LevyFields draft={draft} onChange={edit} feeEditable={false} />
       </div>
       <div className="grid min-w-0 gap-4">
         <LevyReport result={result} compact={compact} />
@@ -65,6 +75,10 @@ export function LevyCalculator({ compact = false }: { compact?: boolean }) {
           </button>
           <a
             href="#contact"
+            onClick={() => {
+              setTouched(true);
+              markCalcTouched();
+            }}
             className="inline-flex min-h-12 flex-1 items-center justify-center rounded-lg bg-zy-gold px-5 text-sm font-bold text-zy-deep transition hover:brightness-105 sm:flex-none"
           >
             预约定制方案书 →

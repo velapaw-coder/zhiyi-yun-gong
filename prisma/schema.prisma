@@ -361,3 +361,29 @@ model AppSetting {
   value     String
   updatedAt DateTime @updatedAt
 }
+
+/// 官网/计算器提交的销售线索（无需登录）。
+model Lead {
+  id         String   @id @default(cuid())
+  company    String
+  contact    String
+  phone      String
+  plan       String?
+  note       String?
+  /// 计算器表单原值（JSON），没测算时为空
+  calcInput  String?
+  /// 服务端按同一套规则重算的结果（JSON）
+  calcResult String?
+  source     String   @default("/")
+  /// new 新线索 / contacted 已联系 / proposed 已出方案 / signed 已签约 / invalid 无效
+  status     String   @default("new")
+  ownerNote  String?
+  proposalId String?
+  ipHash     String?
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@index([status, createdAt])
+  @@index([phone, createdAt])
+  @@index([ipHash, createdAt])
+}
