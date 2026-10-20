@@ -72,7 +72,8 @@ export function LeadForm() {
     const clean = () => document.body.classList.remove("zy-print-lead");
     window.addEventListener("afterprint", clean, { once: true });
     window.print();
-    setTimeout(clean, 1000);
+    // 安卓 App 里 print 是异步的系统打印，由 App 在打印结束后触发 afterprint
+    if (!/ZhiyiApp/.test(navigator.userAgent)) setTimeout(clean, 1000);
   }
 
   if (done) {
