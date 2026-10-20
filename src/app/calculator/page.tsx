@@ -3,13 +3,34 @@ import type { Metadata } from "next";
 import { BrandMark } from "@/components/brand";
 import { LeadForm } from "@/components/lead-form";
 import { LevyCalculator } from "@/components/levy/calculator";
+import { JsonLd, OG_IMAGE, SITE_URL } from "@/lib/seo";
 import { POLICY_TIER_END } from "@/lib/levy";
 
 export const dynamic = "force-static";
 
+const DESC = "免费残保金计算器：按 2026 年现行政策测算残疾人就业保障金，含分档减缴、30 人以下免征、2 倍社平封顶、重度 1 人按 2 人计，给出企业安置残疾人建议、残保金减免成本与投入产出。";
+
 export const metadata: Metadata = {
-  title: "残保金计算器 · 智翼云工",
-  description: "按 2026 年现行政策测算残疾人就业保障金：分档减缴、30 人以下免征、2 倍社平封顶、重度 1 人按 2 人计，给出安置建议、成本与投入产出。",
+  title: "残保金计算器（2026 新政）· 残疾人就业保障金减免测算",
+  description: DESC,
+  keywords: ["残保金计算器", "残保金怎么算", "残保金减免", "残疾人就业保障金计算", "企业安置残疾人", "残保金分档减缴", "助残就业"],
+  alternates: { canonical: "/calculator" },
+  openGraph: { url: "/calculator", title: "残保金计算器（2026 新政）· 智翼云工", description: DESC, images: [OG_IMAGE] },
+};
+
+const appJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  name: "残保金计算器",
+  alternateName: "残疾人就业保障金计算器",
+  url: `${SITE_URL}/calculator`,
+  description: DESC,
+  applicationCategory: "BusinessApplication",
+  operatingSystem: "Web",
+  inLanguage: "zh-CN",
+  isAccessibleForFree: true,
+  offers: { "@type": "Offer", price: "0", priceCurrency: "CNY" },
+  publisher: { "@type": "Organization", name: "深圳市智翼云工科技有限公司", url: SITE_URL, logo: `${SITE_URL}/brand/logo-mark.png` },
 };
 
 const RULES = [
@@ -25,6 +46,7 @@ const RULES = [
 export default function CalculatorPage() {
   return (
     <div className="min-h-screen bg-zy-paper text-zy-text">
+      <JsonLd data={appJsonLd} />
       <header className="sticky top-0 z-30 border-b border-[#d8e4e9] bg-[rgba(248,250,251,0.94)] backdrop-blur-md">
         <div className="mx-auto flex min-h-16 max-w-[1160px] items-center gap-3 px-4 md:px-6">
           <Link href="/" className="flex items-center gap-2.5" aria-label="返回智翼云工首页">

@@ -15,6 +15,23 @@ async function roleOf(token: string | undefined) {
 
 export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
+  const host = (request.headers.get("host") || "").toLowerCase();
+  // 规范域名：www 与旧地址 301 到 zhiyiyungong.com（API 不跳，避免 POST 丢失）
+  if ((host === "www.zhiyiyungong.com" || host === "zhiyi.chang2.ccwu.cc") && !pathname.startsWith("/api/")) {
+    return NextResponse.redirect(`https://zhiyiyungong.com${pathname}${request.nextUrl.search}`, 301);
+  }
+  if (PUBLIC_FILES.has(pathname)) return NextResponse.next();
+  if (pathname.startsWith("/api/")) {
+    const res = await handle(request, pathname);
+    res.headers.set("X-Robots-Tag", "noindex, nofollow");
+    return res;
+  }
+  return handle(request, pathname);
+}
+
+const PUBLIC_FILES = new Set(["/robots.txt", "/sitemap.xml", "/manifest.webmanifest"]);
+
+async function handle(request: NextRequest, pathname: string) {
   const role = await roleOf(request.cookies.get(COOKIE)?.value);
   if (pathname === "/api/login" || pathname === "/api/calc-config" || pathname === "/calculator") return NextResponse.next();
 
