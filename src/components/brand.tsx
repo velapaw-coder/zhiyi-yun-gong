@@ -20,19 +20,20 @@ export function WingGlyph({ className, gradient = false }: { className?: string;
   );
 }
 
-/** 圆角方块品牌标：后台侧栏、登录页、首页导航共用。 */
+/** 品牌标（云+翼）：后台侧栏、登录页、首页导航、方案书共用。深色背景下放在白色圆角底上。 */
 export function BrandMark({ className, tone = "blue" }: { className?: string; tone?: "blue" | "gold" | "glass" }) {
   return (
     <span
       className={cn(
-        "grid size-10 shrink-0 place-items-center rounded-xl",
-        tone === "blue" && "bg-zy-blue text-white",
-        tone === "gold" && "bg-zy-gold text-zy-deep",
-        tone === "glass" && "bg-white/10 text-white ring-1 ring-white/15",
+        "grid size-10 shrink-0 place-items-center overflow-hidden rounded-xl",
+        tone === "blue" && "bg-white ring-1 ring-[#d8e4e9]",
+        tone === "gold" && "bg-white ring-1 ring-zy-gold/40",
+        tone === "glass" && "bg-white shadow-sm ring-1 ring-white/30",
         className,
       )}
     >
-      <WingGlyph className="size-[70%]" />
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img src="/brand/logo-mark.png" alt="" aria-hidden className="size-[82%] object-contain" />
     </span>
   );
 }

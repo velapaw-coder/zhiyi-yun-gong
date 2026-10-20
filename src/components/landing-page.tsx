@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { BrandMark, WingGlyph } from "@/components/brand";
+import { BrandLockup, BrandMark, WingGlyph } from "@/components/brand";
 import { LeadForm } from "@/components/lead-form";
 import { LevyCalculator } from "@/components/levy/calculator";
 
@@ -148,7 +148,7 @@ export function LandingPage() {
       <header className="sticky top-0 z-30 border-b border-[#d8e4e9] bg-[rgba(248,250,251,0.94)] backdrop-blur-md">
         <div className="mx-auto flex min-h-[72px] max-w-[1160px] items-center gap-5 px-6">
           <Link href="/" aria-label="智翼云工 SmartWing Cloudwork 首页" className="shrink-0">
-            <img src="/brand/smartwing-lockup.png" alt="智翼云工 SmartWing Cloudwork" className="h-11 w-auto mix-blend-multiply md:h-12" />
+            <BrandLockup compact />
           </Link>
           <nav aria-label="主导航" className="ml-auto hidden items-center gap-7 text-sm font-semibold text-[#38505a] lg:flex">
             {NAV.map((item) => (
