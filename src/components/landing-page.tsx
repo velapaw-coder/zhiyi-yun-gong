@@ -3,6 +3,7 @@ import { BrandLockup, BrandMark, WingGlyph } from "@/components/brand";
 import { LeadForm } from "@/components/lead-form";
 import { LevyCalculator } from "@/components/levy/calculator";
 
+/** 页脚 / 手机菜单用全量；桌面顶栏只放核心栏目，避免挤成两行。 */
 const NAV = [
   { href: "#why", label: "企业价值" },
   { href: "#calculator", label: "残保金测算" },
@@ -13,6 +14,8 @@ const NAV = [
   { href: "#app", label: "下载 App" },
   { href: "#contact", label: "合作咨询" },
 ];
+/** 桌面顶栏：去掉与右侧按钮重复的「合作咨询」，「下载 App」改放到 CTA 区。 */
+const NAV_DESKTOP = NAV.filter((item) => item.href !== "#app" && item.href !== "#contact");
 
 const PAINS = [
   ["▥", "残保金支出压力", "在合规经营前提下，寻求更有效率的残障就业与成本管理路径。"],
@@ -147,41 +150,52 @@ export function LandingPage() {
       </div>
 
       <header className="sticky top-0 z-30 border-b border-[#d8e4e9] bg-[rgba(248,250,251,0.94)] backdrop-blur-md">
-        <div className="mx-auto flex min-h-[72px] max-w-[1160px] items-center gap-5 px-6">
+        <div className="mx-auto flex min-h-[72px] max-w-[1160px] items-center gap-3 px-4 sm:gap-4 sm:px-6">
           <Link href="/" aria-label="智翼云工 SmartWing Cloudwork 首页" className="shrink-0">
             <BrandLockup compact />
           </Link>
-          <nav aria-label="主导航" className="ml-auto hidden items-center gap-7 text-sm font-semibold text-[#38505a] lg:flex">
-            {NAV.map((item) => (
-              <a key={item.href} href={item.href} className="transition hover:text-zy-cyan">
+          <nav
+            aria-label="主导航"
+            className="ml-auto hidden min-w-0 items-center justify-end gap-x-4 text-[13px] font-semibold tracking-wide whitespace-nowrap text-[#38505a] xl:flex 2xl:gap-x-5"
+          >
+            {NAV_DESKTOP.map((item) => (
+              <a key={item.href} href={item.href} className="shrink-0 transition hover:text-zy-cyan">
                 {item.label}
               </a>
             ))}
           </nav>
-          <div className="ml-auto flex items-center gap-2 lg:ml-2">
+          <div className="ml-auto flex shrink-0 items-center gap-1.5 sm:gap-2 xl:ml-3">
+            <a
+              href="#app"
+              className="hidden rounded-lg px-2.5 py-2 text-[13px] font-semibold whitespace-nowrap text-zy-blue transition hover:bg-zy-pale hover:text-zy-cyan lg:inline-flex"
+            >
+              下载 App
+            </a>
             <Link
               href={consoleHref}
-              className="hidden rounded-lg border border-zy-line bg-white px-4 py-2.5 text-sm font-semibold text-zy-blue transition hover:border-zy-cyan sm:inline-flex"
+              className="hidden rounded-lg border border-zy-line bg-white px-3 py-2 text-[13px] font-semibold whitespace-nowrap text-zy-blue transition hover:border-zy-cyan sm:inline-flex xl:px-4 xl:py-2.5"
             >
-              {consoleLabel}
+              <span className="xl:hidden">登录</span>
+              <span className="hidden xl:inline">{consoleLabel}</span>
             </Link>
             <a
               href="#contact"
-              className="inline-flex rounded-lg bg-zy-blue px-4 py-2.5 text-sm font-bold text-white transition hover:-translate-y-0.5 hover:bg-zy-deep"
+              className="inline-flex rounded-lg bg-zy-blue px-3 py-2 text-[13px] font-bold whitespace-nowrap text-white transition hover:-translate-y-0.5 hover:bg-zy-deep sm:px-4 sm:py-2.5"
             >
-              预约方案咨询 →
+              <span className="sm:hidden">咨询 →</span>
+              <span className="hidden sm:inline">预约方案咨询 →</span>
             </a>
-            <details className="relative lg:hidden">
+            <details className="relative xl:hidden">
               <summary className="grid size-10 cursor-pointer list-none place-items-center rounded-lg text-xl text-zy-deep [&::-webkit-details-marker]:hidden" aria-label="打开导航">
                 ☰
               </summary>
-              <nav className="absolute right-0 top-12 flex w-52 flex-col rounded-xl border border-zy-line bg-white p-2 text-sm font-semibold text-[#38505a] shadow-lg">
+              <nav className="absolute right-0 top-12 flex w-56 flex-col rounded-xl border border-zy-line bg-white p-2 text-sm font-semibold text-[#38505a] shadow-lg">
                 {NAV.map((item) => (
                   <a key={item.href} href={item.href} className="rounded-lg px-3 py-2.5 hover:bg-zy-pale">
                     {item.label}
                   </a>
                 ))}
-                <Link href={consoleHref} className="rounded-lg px-3 py-2.5 text-zy-blue hover:bg-zy-pale">
+                <Link href={consoleHref} className="rounded-lg px-3 py-2.5 text-zy-blue hover:bg-zy-pale sm:hidden">
                   {consoleLabel}
                 </Link>
               </nav>
