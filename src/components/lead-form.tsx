@@ -115,7 +115,7 @@ export function LeadForm() {
                   </div>
                 </div>
                 <LevyReport result={done.result} />
-                <p className="mt-5 text-xs leading-5 text-[#697d87]">本报告由智翼云工残保金计算器按现行政策自动测算，仅供参考，以当地残联和税务部门核定为准。zhiyiyungong.com</p>
+                <p className="mt-5 text-xs leading-5 text-[#697d87]">本报告由智翼云工残保金计算器按现行政策自动测算，仅供参考，以当地残联和税务部门核定为准。wingworkai.com</p>
               </div>,
               document.body,
             )

@@ -10,6 +10,7 @@ const NAV = [
   { href: "#services", label: "产品服务" },
   { href: "#evidence", label: "合规体系" },
   { href: "#platform", label: "平台" },
+  { href: "#app", label: "下载 App" },
   { href: "#contact", label: "合作咨询" },
 ];
 
@@ -219,6 +220,12 @@ export function LandingPage() {
                 <Link href={consoleHref} className="inline-flex min-h-12 items-center rounded-lg px-4 text-sm font-semibold text-[#9fe0ef] hover:text-white">
                   {consoleLabel} →
                 </Link>
+                <a
+                  href="/downloads/zhiyiyungong-1.0.1.apk"
+                  className="inline-flex min-h-12 items-center rounded-lg border border-[#82b5c6] px-5 text-sm font-bold text-white transition hover:-translate-y-0.5 hover:bg-white/5"
+                >
+                  下载 Android App ↓
+                </a>
               </div>
               <div className="mt-12 grid gap-3 sm:grid-cols-3">
                 {[
@@ -447,6 +454,48 @@ export function LandingPage() {
             <p className="mt-6 text-xl font-bold text-zy-blue">以科技赋翼，让合规生长。</p>
           </div>
         </section>
+
+        {/* App download */}
+        <Section
+          id="app"
+          tone="white"
+          kicker="下载 App"
+          title="智翼云工 Android 客户端"
+          lede="壳应用直接打开本站。网站更新后，App 里也会同步看到，不用重新安装。"
+        >
+          <div className="grid items-center gap-8 rounded-2xl bg-zy-paper p-6 ring-1 ring-zy-line md:grid-cols-[1.2fr_auto] md:p-8">
+            <div>
+              <p className="text-sm leading-7 text-zy-muted">
+                适合企业运营、执行端在手机上登录控制台、交任务、上传照片。登录状态会保存在本机；支持拍照上传与测算报告/方案书另存为 PDF。
+              </p>
+              <ul className="mt-4 grid gap-2 text-sm text-zy-deep sm:grid-cols-2">
+                <li className="rounded-lg bg-white px-3 py-2 ring-1 ring-zy-line">· 仅 Android，版本 1.0.1</li>
+                <li className="rounded-lg bg-white px-3 py-2 ring-1 ring-zy-line">· 需允许「安装未知应用」</li>
+                <li className="rounded-lg bg-white px-3 py-2 ring-1 ring-zy-line">· iOS 暂未上架</li>
+                <li className="rounded-lg bg-white px-3 py-2 ring-1 ring-zy-line">· 约 320 KB，免应用商店下载</li>
+              </ul>
+              <div className="mt-6 flex flex-wrap gap-3">
+                <a
+                  href="/downloads/zhiyiyungong-1.0.1.apk"
+                  className="inline-flex min-h-12 items-center justify-center rounded-lg bg-zy-blue px-6 text-sm font-bold text-white transition hover:-translate-y-0.5 hover:bg-zy-deep"
+                >
+                  下载 APK（Android）↓
+                </a>
+                <a href="#contact" className="inline-flex min-h-12 items-center px-3 text-sm font-semibold text-zy-blue hover:text-zy-cyan">
+                  需要协助安装？联系顾问 →
+                </a>
+              </div>
+              <p className="mt-3 text-xs leading-5 text-zy-muted">
+                安装包：zhiyiyungong-1.0.1.apk · 包名 com.zhiyiyungong.app。已装旧版可直接覆盖安装（同一签名）。
+              </p>
+            </div>
+            <div className="mx-auto flex flex-col items-center gap-2 rounded-2xl bg-white p-4 ring-1 ring-zy-line">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src="/brand/apk-qr.png" alt="扫描下载智翼云工 Android App" width={168} height={168} className="size-40" />
+              <p className="text-center text-xs font-semibold text-zy-deep">手机扫码下载</p>
+            </div>
+          </div>
+        </Section>
 
         {/* 08 */}
         <section id="contact" className="scroll-mt-20 py-16 md:py-22">

@@ -16,9 +16,15 @@ async function roleOf(token: string | undefined) {
 export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
   const host = (request.headers.get("host") || "").toLowerCase();
-  // 规范域名：www 与旧地址 301 到 zhiyiyungong.com（API 不跳，避免 POST 丢失）
-  if ((host === "www.zhiyiyungong.com" || host === "zhiyi.chang2.ccwu.cc") && !pathname.startsWith("/api/")) {
-    return NextResponse.redirect(`https://zhiyiyungong.com${pathname}${request.nextUrl.search}`, 301);
+  // 规范域名：www 与旧地址 301 到 wingworkai.com（API 不跳，避免 POST 丢失）
+  const legacyHosts = new Set([
+    "www.wingworkai.com",
+    "zhiyiyungong.com",
+    "www.zhiyiyungong.com",
+    "zhiyi.chang2.ccwu.cc",
+  ]);
+  if (legacyHosts.has(host) && !pathname.startsWith("/api/")) {
+    return NextResponse.redirect(`https://wingworkai.com${pathname}${request.nextUrl.search}`, 301);
   }
   if (PUBLIC_FILES.has(pathname)) return NextResponse.next();
   if (pathname.startsWith("/api/")) {
@@ -30,13 +36,14 @@ export async function proxy(request: NextRequest) {
 }
 
 const PUBLIC_FILES = new Set(["/robots.txt", "/sitemap.xml", "/manifest.webmanifest"]);
+  // /downloads/*.apk 走静态资源，matcher 已排除；留白防止将来改 matcher 后漏拦
 
 async function handle(request: NextRequest, pathname: string) {
   const role = await roleOf(request.cookies.get(COOKIE)?.value);
   if (pathname === "/api/login" || pathname === "/api/calc-config" || pathname === "/api/leads" || pathname === "/calculator") return NextResponse.next();
 
   if (!role) {
-    if (pathname === "/" || pathname === "/home" || pathname === "/login") return NextResponse.next();
+    if (pathname === "/" || pathname === "/home" || pathname === "/login" || pathname.startsWith("/downloads/")) return NextResponse.next();
     if (pathname.startsWith("/api/")) {
       return NextResponse.json({ error: "未登录" }, { status: 401 });
     }
@@ -82,5 +89,5 @@ async function handle(request: NextRequest, pathname: string) {
 }
 
 export const config = {
-  matcher: ["/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)"],
+  matcher: ["/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp|apk)$).*)"],
 };

@@ -1,4 +1,4 @@
-export const SITE_URL = "https://zhiyiyungong.com";
+export const SITE_URL = "https://wingworkai.com";
 export const SITE_NAME = "智翼云工";
 export const OG_IMAGE = { url: "/og.png", width: 1200, height: 630, alt: "智翼云工 SmartWing Cloudwork · 残保金计算器 · 助残就业" };
 export const KEYWORDS = ["残保金计算器", "残保金减免", "残疾人就业保障金", "助残就业", "企业安置残疾人", "灵活用工 助残", "残保金测算", "智翼云工"];
